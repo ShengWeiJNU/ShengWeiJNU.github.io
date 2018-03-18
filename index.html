@@ -1,1 +1,51 @@
-hello, github page.
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>0319</title>
+	<meta name="viewport" content="width=device-width;height=device-height">
+	<link rel="stylesheet" type="text/css" href="0319.css">
+</head>
+<body>
+<div class="container">
+	<span>PointerLock</span>
+	<p></p>	
+</div>
+
+<script type="text/javascript">
+var container = document.querySelector('.container');
+var p = document.querySelector('p');
+function moved(e){
+	e.target.setCapture();
+	p.innerText = `
+	${e.movementX},\n${e.movementY}`;
+	moveControl.scrollX = e.movementX;
+	moveControl.scrollY = e.movementY;
+}
+container.onmousedown = e=>{
+	e.target.addEventListener('mousemove', moved);
+	// e.target.mozRequestFullScreen();
+	e.target.requestPointerLock();
+}
+container.onmouseup = e=>{
+	e.target.removeEventListener('mousemove', moved);
+	document.exitPointerLock();
+}
+
+var moveControl = {
+	get scrollX(){
+		return document.documentElement.scrollLeft;
+	},
+	set scrollX(val){
+		document.documentElement.scrollBy(val, 0);
+	},
+	get scrollY(){
+		return document.documentElement.scrollTop;
+	},
+	set scrollY(val){
+		document.documentElement.scrollBy(0, val);
+	}
+}
+</script>
+</body>
+</html>
