@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>scrollHelper</title>
+	<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="scrollHelper.css">
+	<script type="text/javascript" src="scrollHelper.js"></script>
+	<script type="text/javascript" src="../polyfill/polyfill.js"></script>
+<style type="text/css">
+html{
+  min-width: 910px;
+  padding: 30px 10%;
+  background-image: linear-gradient(hsla(0,100%,50%,.35), hsla(190,100%,50%,.35));
+  box-sizing: border-box;
+}
+body{
+  max-width: 1200px;
+  min-height: 3500px;
+  margin: 0 auto;
+  background-color: hsla(0, 0%, 750%, .35)
+}
+</style>
+</head>
+<body>
+<div class="comp-scroll-helper component-close component">
+	<div class="drag-zone">PressPanel</div>
+	<div class="pointerlock-zone"></div>
+</div>
+<div id="d1" class="comp-scroll-helper component-close component">
+	<div class="drag-zone">PressPanel</div>
+	<div class="pointerlock-zone"></div>
+</div>
+<script type="text/javascript">
+for(let i in console){
+	window[i] = console[i];
+}
+
+var helper = new ScrollHelper(document.querySelector('.comp-scroll-helper'), document.documentElement);
+helper.open();
+
+var helper1 = new ScrollHelper(document.querySelector('#d1'), document.documentElement);
+helper1.open();
+</script>
+</body>
+</html>

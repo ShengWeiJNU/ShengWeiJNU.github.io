@@ -1,38 +1,40 @@
-html{
-  min-width: 910px;
-  padding: 30px 10%;
-  background-image: linear-gradient(hsla(0,100%,50%,.35), hsla(190,100%,50%,.35));
-  box-sizing: border-box;
+.component-open{
+  visibility: 1;
+  opacity: 1;
 }
-body{
-  max-width: 1200px;
-  min-height: 3500px;
-  margin: 0 auto;
-  background-color: hsla(0, 0%, 750%, .35)
+.component-close{
+/*   visibility: 0;
+  opacity: 0;
+  z-index: -10 !important; */
 }
-.page-scroll-helper{
-  width: 160px;
+.component{
+  transition: visibility .15s linear, opacity .15s linear;
+}
+
+.comp-scroll-helper{
+  min-width: 160px;
   position: fixed;
   left: 50%;
   top: 50%;
+  z-index: 9995;
   -moz-user-select: none;
   -webkit-user-select: none;
-  transform: translate(-50%, -50%);
   background-color: hsla(0, 8%, 50%, .3);
   box-sizing: border-box;
   border-radius: 6px;
   text-align: center;
   overflow: hidden;
 }
-span{
+.comp-scroll-helper>.drag-zone{
   height: 30px;
   display: block;
+  padding: 0 6px;
   background-color: hsla(0, 0%, 50%, .18);
   font-size: 20px;
   line-height: 30px;
   color: #fff;
 }
-p{
+.comp-scroll-helper>.pointerlock-zone{
   height: 110px;
   margin: 0;
   line-height: 1.2;
