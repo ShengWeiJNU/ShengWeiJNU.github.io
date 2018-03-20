@@ -6,7 +6,6 @@
 	<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no">
 	<link rel="stylesheet" type="text/css" href="scrollHelper.css">
 	<script type="text/javascript" src="scrollHelper.js"></script>
-	<script type="text/javascript" src="../polyfill/polyfill.js"></script>
 <style type="text/css">
 html{
   min-width: 910px;
@@ -31,16 +30,45 @@ body{
 	<div class="drag-zone">PressPanel</div>
 	<div class="pointerlock-zone"></div>
 </div>
+<div id="d2" class="comp-scroll-helper component-close component">
+	<div class="drag-zone">PressPanel</div>
+	<div class="pointerlock-zone"></div>
+</div>
+<div id="d3" class="comp-scroll-helper component-close component">
+	<div class="drag-zone">PressPanel</div>
+	<div class="pointerlock-zone"></div>
+</div>
+<div id="d4" class="comp-scroll-helper component-close component">
+	<div class="drag-zone">PressPanel</div>
+	<div class="pointerlock-zone"></div>
+</div>
 <script type="text/javascript">
 for(let i in console){
 	window[i] = console[i];
 }
+
+var s = 'a b c d e f g h i j k l m n o p q r s t u v x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 0 1 2 3 4 5 6 7 8 9 - + * / = '.split('');
+var text='';
+for(var i=0,l=s.length,ind=0; i<1000000; i++){
+	ind = ~~(Math.random()*l);
+	text += s[ind];
+}
+document.body.prepend(text);
 
 var helper = new ScrollHelper(document.querySelector('.comp-scroll-helper'), document.documentElement);
 helper.open();
 
 var helper1 = new ScrollHelper(document.querySelector('#d1'), document.documentElement);
 helper1.open();
+
+var helper2 = new ScrollHelper(document.querySelector('#d2'), document.documentElement);
+helper2.open();
+
+var helper3 = new ScrollHelper(document.querySelector('#d3'), document.documentElement);
+helper3.open();
+
+var helper4 = new ScrollHelper(document.querySelector('#d4'), document.documentElement);
+helper4.open();
 </script>
 </body>
 </html>

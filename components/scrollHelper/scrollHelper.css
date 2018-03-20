@@ -3,9 +3,9 @@
   opacity: 1;
 }
 .component-close{
-/*   visibility: 0;
+  visibility: 0;
   opacity: 0;
-  z-index: -10 !important; */
+  z-index: -10 !important;
 }
 .component{
   transition: visibility .15s linear, opacity .15s linear;
@@ -14,8 +14,8 @@
 .comp-scroll-helper{
   min-width: 160px;
   position: fixed;
-  left: 50%;
-  top: 50%;
+  left: 70%;
+  top: 65%;
   z-index: 9995;
   -moz-user-select: none;
   -webkit-user-select: none;
