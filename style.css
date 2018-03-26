@@ -1,40 +1,47 @@
+::-moz-selection{
+  background-color: #b3d4fc;
+  color: #333333;
+  -moz-text-shadow: none; /*compatible*/
+  -webkit-text-shadow: none;
+  text-shadow: none;
+}
+::selection{
+  background-color: #b3d4fc;
+  color: #333333;
+  -moz-text-shadow: none; /*compatible*/
+  -webkit-text-shadow: none;
+  text-shadow: none;
+}
 html{
   min-width: 910px;
   padding: 30px 10%;
-  background-image: linear-gradient(hsla(0,100%,50%,.35), hsla(190,100%,50%,.35));
+  background-color: rgb(241, 243, 245);
+  box-sizing: border-box; /*compatible*/
+  box-sizing: border-box;
   box-sizing: border-box;
 }
 body{
-  max-width: 1200px;
+  max-width: 1000px;
   min-height: 3500px;
   margin: 0 auto;
-  background-color: hsla(0, 0%, 750%, .35)
+  padding: 15px 65px;
+  background-color: #fff;
+  color: rgb(51, 68, 85);
+  -moz-box-shadow: rgba(102, 119, 136, 0.03) 0px 6px 8px, rgba(102, 119, 136, 0.3) 0px 1px 2px; /*compatible*/
+  -webkit-box-shadow: rgba(102, 119, 136, 0.03) 0px 6px 8px, rgba(102, 119, 136, 0.3) 0px 1px 2px;
+  box-shadow: rgba(102, 119, 136, 0.03) 0px 6px 8px, rgba(102, 119, 136, 0.3) 0px 1px 2px;
 }
-.page-scroll-helper{
-  width: 160px;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  transform: translate(-50%, -50%);
-  background-color: hsla(0, 8%, 50%, .3);
-  box-sizing: border-box;
-  border-radius: 6px;
-  text-align: center;
-  overflow: hidden;
-}
-span{
-  height: 30px;
-  display: block;
-  background-color: hsla(0, 0%, 50%, .18);
-  font-size: 20px;
-  line-height: 30px;
-  color: #fff;
-}
+
+
+
 p{
-  height: 110px;
-  margin: 0;
-  line-height: 1.2;
-  color: gray;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+p:first-child{
+  margin-bottom: 40px;
+  font-size: 30px;
+}
+p:not(:first-child){
+  line-height: 1.6;
 }

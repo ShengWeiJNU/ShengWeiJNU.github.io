@@ -1,3 +1,16 @@
+/**
+ * created by bibibobo
+ * last edit on 2018/03/26 01:17
+ * This is a web component, uses web component standard techs, like 
+ * Custom Elements: https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements
+ * Shadow DOM: https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM
+ * HTML <template>: https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots
+ * Now, just include this .js doc, and write:
+ * var scrollHelper = new scrollHelper();
+ * scrollHelper.open();
+ * That's all, you have already used this component!
+**/
+
 (function(){
 /** 
  *  limit a val between min and max.
@@ -65,8 +78,12 @@ function docMouseUp(e_){
  *  @properties: bindEle, targetEle
  *  @methods: open, close, moveRangeX[get], moveRangeY[get]
 **/
-function ScrollHelper(bindEle_, tarEle_){
-	this.bindEle = bindEle_;
+function ScrollHelper(tarEle_){
+	this.bindEle = (function(){
+		var ele = document.createElement('scroll-helper');
+		document.body.appendChild(ele);
+		return ele.shadowRoot.querySelector('.comp-scroll-helper');
+	})();
 	this.targetEle = tarEle_ = tarEle_ || document.documentElement;
 	// use the data-pos_rate attribute stores current positon of scrolHelper ele,
 	// between [0, 1.0]. Will be useful when recalculate position while window resizing.
@@ -91,6 +108,75 @@ function ScrollHelper(bindEle_, tarEle_){
 		self.bindEle.style.top = topPercent*self.moveRangeY/window.innerHeight*100 +'%';
 	});
 };
+
+Object.defineProperty(ScrollHelper, 'templateEle', {
+	value: (function(){
+		var templateEle = document.createElement('template');
+		templateEle.innerHTML = `
+			<style>
+				.component-open{
+				  visibility: 1;
+				  opacity: 1;
+				}
+				.component-close{
+				  visibility: 0;
+				  opacity: 0;
+				  z-index: -10 !important;
+				}
+				.component{
+				  transition: visibility .15s linear, opacity .15s linear;
+				}
+
+				.comp-scroll-helper{
+				  min-width: 160px;
+				  position: fixed;
+				  left: 70%;
+				  top: 65%;
+				  z-index: 9995;
+				  -moz-user-select: none;
+				  -webkit-user-select: none;
+				  background-color: hsla(0, 8%, 50%, .5);
+				  box-sizing: border-box;
+				  border-radius: 6px;
+				  text-align: center;
+				  overflow: hidden;
+				}
+				.comp-scroll-helper>.drag-zone{
+				  height: 30px;
+				  display: block;
+				  padding: 0 6px;
+				  background-color: hsla(0, 0%, 50%, .4);
+				  font-size: 20px;
+				  line-height: 30px;
+				  color: #fff;
+				}
+				.comp-scroll-helper>.pointerlock-zone{
+				  height: 110px;
+				  margin: 0;
+				  line-height: 1.2;
+				  color: gray;
+				}
+			</style>
+			<div class="comp-scroll-helper component-close component">
+				<div class="drag-zone">PressPanel</div>
+				<div class="pointerlock-zone"></div>
+			</div>
+		`;
+		customElements.define('scroll-helper', 
+			class extends HTMLElement{
+				constructor(){
+					super();
+					var content = templateEle.content;
+					this.attachShadow({mode:'open'}).appendChild(content.cloneNode(true));
+				}
+			}
+		);
+		return templateEle;
+	})(),
+	writable: false,
+	enumerable: true,
+	configurable: false
+})
 
 // get max-Width and max-Height the scrollHelper can move, to avoid going outside the viewport.
 Object.defineProperties(ScrollHelper.prototype, {
@@ -117,8 +203,10 @@ ScrollHelper.prototype.open = function(){
 	// start move scrollHelper position.
 	dragZone.onmousedown = function(e_){
 		var curEle = e_.currentTarget;
-		var parEle = curEle.parentNode;
-		parEle.parentNode.appendChild(parEle);
+		var customEle = curEle.parentNode.parentNode.host;
+		if(customEle.parentNode.lastChild !== customEle){
+			customEle.parentNode.appendChild(customEle);
+		}
 		// register document mouseMove and mouseUp event.
 		document.addEventListener('mousemove', helperMove);
 		document.addEventListener('mouseup', docMouseUp);
@@ -136,9 +224,13 @@ ScrollHelper.prototype.open = function(){
 
 	// starts pointerLock Api.
 	pointerlockZone.onmousedown = function(e_){
-		e_.currentTarget.parentNode.parentNode.appendChild(e_.currentTarget.parentNode);
-		e_.currentTarget.addEventListener('mousemove', lockMove);
-		e_.currentTarget.requestPointerLock();
+		var curEle = e_.currentTarget;
+		var customEle = curEle.parentNode.parentNode.host;
+		if(customEle.parentNode.lastChild !== customEle){
+			customEle.parentNode.appendChild(customEle);
+		}
+		curEle.addEventListener('mousemove', lockMove);
+		curEle.requestPointerLock();
 		// helperTargetEle stores element which ScrollHelper acts on.
 		MouseEvent.prototype.helperTargetEle = self.targetEle;
 	}

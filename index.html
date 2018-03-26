@@ -5,15 +5,28 @@
 	<title>bibibobo</title>
 	<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no">
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<link rel="import" type="text/css" href="components/scrollHelper/scrollHelper.html">
+	<script src="components/scrollHelper/scrollHelper.js"></script>
 </head>
 <body>
-<div class="page-scroll-helper">
-	<span>PointerLock</span>
-	<p></p>
-</div>
-
+<p>This site is on decorating, please visit later.</p>
+<hr>
 <script type="text/javascript">
+var helper = new ScrollHelper(document.documentElement);
+helper.open();
+
+var s = ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/*-+~!@#$%^&*()_={}[]\|;:\'",./?';
+var len = s.length;
+for(let i=0; i<15; i++){
+	var p = document.createElement('p');
+	var text = '';
+	for(let j=0,ind,l=200+Math.random()*1000; j<l; j++){
+		ind = ~~(Math.random()*len);
+		text += s[ind];
+		text += Math.random()<=0.2 ? ' ' : '';
+	}
+	p.innerHTML = text;
+	document.body.appendChild(p);
+}
 </script>
 </body>
 </html>
