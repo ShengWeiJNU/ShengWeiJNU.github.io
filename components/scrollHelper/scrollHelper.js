@@ -84,7 +84,11 @@ function ScrollHelper(tarEle_){
 		document.body.appendChild(ele);
 		return ele.shadowRoot.querySelector('.comp-scroll-helper');
 	})();
-	this.targetEle = tarEle_ = tarEle_ || document.documentElement;
+	if(tarEle_ === null){
+		throw Error('targetElement is null, can\'t create ScrollHelper.');
+	}else{
+		this.targetEle = tarEle_ = tarEle_ || document.documentElement;
+	}
 	// use the data-pos_rate attribute stores current positon of scrolHelper ele,
 	// between [0, 1.0]. Will be useful when recalculate position while window resizing.
 	var initPosRate = {
@@ -135,7 +139,7 @@ Object.defineProperty(ScrollHelper, 'templateEle', {
 				  z-index: 9995;
 				  -moz-user-select: none;
 				  -webkit-user-select: none;
-				  background-color: hsla(0, 8%, 50%, .5);
+				  background-color: hsla(0, 0%, 50%, .35);
 				  box-sizing: border-box;
 				  border-radius: 6px;
 				  text-align: center;

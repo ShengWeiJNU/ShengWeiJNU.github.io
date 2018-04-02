@@ -32,16 +32,6 @@ body{
   box-shadow: rgba(102, 119, 136, 0.03) 0px 6px 8px, rgba(102, 119, 136, 0.3) 0px 1px 2px;
 }
 
-
-
-p{
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-p:first-child{
-  margin-bottom: 40px;
-  font-size: 30px;
-}
-p:not(:first-child){
-  line-height: 1.6;
+h1{
+  font-weight: 500;
 }
