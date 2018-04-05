@@ -1,0 +1,41 @@
+::-moz-selection{
+  background-color: #b3d4fc;
+  color: #333333;
+  -moz-text-shadow: none; /*compatible*/
+  -webkit-text-shadow: none;
+  text-shadow: none;
+}
+::selection{
+  background-color: #b3d4fc;
+  color: #333333;
+  -moz-text-shadow: none; /*compatible*/
+  -webkit-text-shadow: none;
+  text-shadow: none;
+}
+html{
+  min-width: 910px;
+  height: 100%;
+  padding: 30px 10%;
+  background-color: rgb(241, 243, 245);
+  box-sizing: border-box; /*compatible*/
+  box-sizing: border-box;
+  box-sizing: border-box;
+}
+body{
+  max-width: 1000px;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 15px 65px;
+  background-color: #fff;
+  color: rgb(51, 68, 85);
+  box-sizing: border-box; /*compatible*/
+  box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-box-shadow: rgba(102, 119, 136, 0.03) 0px 6px 8px, rgba(102, 119, 136, 0.3) 0px 1px 2px; /*compatible*/
+  -webkit-box-shadow: rgba(102, 119, 136, 0.03) 0px 6px 8px, rgba(102, 119, 136, 0.3) 0px 1px 2px;
+  box-shadow: rgba(102, 119, 136, 0.03) 0px 6px 8px, rgba(102, 119, 136, 0.3) 0px 1px 2px;
+}
+
+h1{
+  font-weight: 500;
+}

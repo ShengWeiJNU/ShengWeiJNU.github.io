@@ -10,7 +10,6 @@
  * scrollHelper.open();
  * That's all, you have already used this component!
 **/
-
 (function(){
 /** 
  *  limit a val between min and max.
@@ -71,6 +70,108 @@ function docMouseUp(e_){
 	// document mouseup, means the interaction done, so clear the mouseup event too.
 	document.removeEventListener('mouseup', docMouseUp);
 }
+
+// Because in origin DOM, a key Up will stop keydown event, though there are keys down.
+// So we build a structure: KeyboardEvent.prototype.keys, to store which keys are down.
+// And use a interval to poll while there are keys stored in this structure.
+function createPollInterval(){
+	var scrollEle = MouseEvent.prototype.helperTargetEle;
+	var keyEvtPrototype = KeyboardEvent.prototype;
+	var keys = keyEvtPrototype.keys;
+	var moveX, moveY, dis;
+	var pow = Math.pow;
+	var now = Date.now;
+	var id = setInterval(function(){
+		moveX=0, moveY=0;
+		dis = 1 + pow((now()-keyEvtPrototype.keyDnTriggeredTime)/5000, 2)*60;
+		dis = constrain(dis, -70, 70);
+		dis = constrain(dis, -70, 70);
+		if(keys.codes.length){
+			// Page Up
+			if(keys[33]){
+				let lastPressTime = keyEvtPrototype.lastPgUpActivedTime;
+				if(lastPressTime===null || (now()-lastPressTime)>=500){
+					keyEvtPrototype.lastPgUpActivedTime = now();
+					moveY -= scrollEle===document.documentElement ? innerHeight : scrollEle.getBoundingClientRect().height;
+				}
+			}
+			// page Down
+			if(keys[34]){
+				let lastPressTime = keyEvtPrototype.lastPgDnActivedTime;
+				if(lastPressTime===null || (now()-lastPressTime)>=500){
+					keyEvtPrototype.lastPgDnActivedTime = now();
+					moveY += scrollEle===document.documentElement ? innerHeight : scrollEle.getBoundingClientRect().height;
+				}
+			}
+			// Left Arrow
+			if(keys[37]){
+				moveX -= dis;
+			}
+			// Up Arrow
+			if(keys[39]){
+				moveX += dis;
+			}
+			// Right Arrow
+			if(keys[38]){
+				moveY -= dis;
+			}
+			// Down Arrow
+			if(keys[40]){
+				moveY += dis;
+			}
+			scrollEle.scrollBy(moveX, moveY);
+		}
+	}, 16);
+	KeyboardEvent.prototype.intervalId = id;
+};
+
+// clear the current polling interval, because of all keys up or restart a interval while a new key's down.
+function clearPollInterval(){
+	clearInterval(KeyboardEvent.prototype.intervalId);
+	KeyboardEvent.prototype.intervalId = null;
+}
+
+// when pressed the pointerlockZone, press left/up/right/down arrow to scroll.
+function keysDown(e_){
+	var keys = KeyboardEvent.prototype.keys;
+	var intervalId = KeyboardEvent.prototype.intervalId;
+	var keyCode = e_.keyCode;
+	if(keys[keyCode] === undefined){
+		keys[keyCode] = true;
+		keys.codes.push(keyCode);
+		if(intervalId === null){
+			clearPollInterval();
+			createPollInterval();
+		}
+		// When trigger any key down, set keyDnTriggeredTime.
+		KeyboardEvent.prototype.keyDnTriggeredTime = Date.now();
+	}
+	e_.preventDefault();
+}
+
+// when key up, remove from KeyboardEvent.prototype.keys
+function keysUp(e_){
+	var keys = KeyboardEvent.prototype.keys;
+	var codes = keys.codes;
+	var keyCode = e_.keyCode;
+	delete keys[keyCode];
+	codes.splice(codes.indexOf(keyCode), 1);
+	clearPollInterval();
+	if(codes.length){
+		createPollInterval();
+	}
+	// If pgUp or pgDn is released, reset lastPgUpActivedTime or lastPgDnActivedTime value.
+	// So that when user click this two keys quickly, we can trigger correctly.
+	if(keyCode === 33){
+		KeyboardEvent.prototype.lastPgUpActivedTime = null;
+	}
+	if(keyCode === 34){
+		KeyboardEvent.prototype.lastPgDnActivedTime = null;
+	}
+	e_.preventDefault();
+}
+
+
 
 /**
  *  Class ScrollHelper
@@ -226,7 +327,7 @@ ScrollHelper.prototype.open = function(){
 		MouseEvent.prototype.helperDragZoneEle = e_.currentTarget;
 	}
 
-	// starts pointerLock Api.
+	// Starts pointerLock Api.
 	pointerlockZone.onmousedown = function(e_){
 		var curEle = e_.currentTarget;
 		var customEle = curEle.parentNode.parentNode.host;
@@ -234,16 +335,38 @@ ScrollHelper.prototype.open = function(){
 			customEle.parentNode.appendChild(customEle);
 		}
 		curEle.addEventListener('mousemove', lockMove);
+		document.addEventListener('keydown', keysDown);
+		document.addEventListener('keyup', keysUp);
 		curEle.requestPointerLock();
-		// helperTargetEle stores element which ScrollHelper acts on.
+		// HelperTargetEle stores element which ScrollHelper acts on.
 		MouseEvent.prototype.helperTargetEle = self.targetEle;
+		// Add a Keyboard event attribute: keys, store current pressed keyCodes
+		KeyboardEvent.prototype.keys = {codes: []};
+		// Store keys polling intervalId.
+		KeyboardEvent.prototype.intervalId = null;
+		// When press pageUp and pageDown, we don't want to trigger in a high frequency,
+		// this two attriutes store last time moment when we press such keys, so we can judge
+		// time between two triggers.
+		KeyboardEvent.prototype.lastPgUpActivedTime = null;
+		KeyboardEvent.prototype.lastPgDnActivedTime = null;
+		// To scroll faster and faster when the pressedTime grows. We save the time when keyDown is
+		// triggered.
+		KeyboardEvent.prototype.keyDnTriggeredTime = null;
 	}
 
 	// finish pointerLock Api, delete extensive property on MouseEvent.prototype.
 	pointerlockZone.onmouseup = function(e_){
 		e_.currentTarget.removeEventListener('mousemove', lockMove);
+		document.removeEventListener('keydown', keysDown);
+		document.removeEventListener('keyup', keysUp);
 		document.exitPointerLock();
+		clearPollInterval();
 		delete MouseEvent.prototype.helperTargetEle;
+		delete KeyboardEvent.prototype.keys;
+		delete KeyboardEvent.prototype.intervalId;
+		delete KeyboardEvent.prototype.lastPgUpActivedTime;
+		delete KeyboardEvent.prototype.lastPgDnActivedTime;
+		delete KeyboardEvent.prototype.keyDnTriggeredTime;
 	}
 }
 

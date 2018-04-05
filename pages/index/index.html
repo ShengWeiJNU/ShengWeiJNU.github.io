@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>bibibobo</title>
+	<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="../../components/scrollHelper/scrollHelper.js"></script>
+</head>
+<body>
+<h1>This site is on decorating, please visit later.</h1>
+<hr>
+<script type="text/javascript">
+
+var s = '';
+for(let i=0; i<10000; i++){
+	s += Math.random()*1505;
+	s += '\n';
+}
+document.body.innerText += s;
+
+var helper = [];
+helper[0] = new ScrollHelper(document.documentElement);
+helper[0].open();
+</script>
+</body>
+</html>
