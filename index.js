@@ -53,21 +53,22 @@ function initNav(config_, ind_){
 			oldContent.setAttribute('data-scrolly', docEle.scrollTop);
 		});
 		liEle.addEventListener('click', e_=>{
-			// Change checked nav item.
 			var oldCheckedItem = nav.querySelector('li[data-checked="true"]');
-			// If click same nav item for the second time, scroll document to top.
-			if(oldCheckedItem === e_.currentTarget){
-				docEle.scrollTo(docEle.scrollLeft, 0);
-				return;
-			}
-			oldCheckedItem.removeAttribute('data-checked');
-			e_.currentTarget.setAttribute('data-checked', 'true');
-			// Change actived content-ele, and scroll document to content-ele's data-scrolly attr.
 			var content = getContentPage(config_.pages, items[i]);
-			var oldContent = mainContainer.querySelector('.content.active');
-			oldContent.classList.remove('active');
-			content.classList.add('active');
-			var newScrollY = content.getAttribute('data-scrolly');
+			if(oldCheckedItem !== e_.currentTarget){
+				// Change checked nav item.
+				oldCheckedItem.removeAttribute('data-checked');
+				e_.currentTarget.setAttribute('data-checked', 'true');
+				// Change actived content-ele, and scroll document to content-ele's data-scrolly attr.
+				let oldContent = mainContainer.querySelector('.content.active');
+				oldContent.classList.remove('active');
+				content.classList.add('active');
+			}
+			var newScrollY = 0;
+			// If not a single click, scroll document to top
+			if(e_.detail === 1){
+				newScrollY = content.getAttribute('data-scrolly');
+			}
 			docEle.scrollTo(docEle.scrollLeft, newScrollY);
 		});
 		nav.appendChild(liEle);
