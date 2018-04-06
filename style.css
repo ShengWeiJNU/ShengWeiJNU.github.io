@@ -25,7 +25,7 @@ body{
   max-width: 1000px;
   min-height: 100%;
   margin: 0 auto;
-  padding: 15px 65px;
+  padding: 0 65px 15px 65px;
   background-color: #fff;
   color: rgb(51, 68, 85);
   font-family: 'microsoft yahei';
@@ -54,11 +54,22 @@ a.link:focus::before{
   color: #f00;
 }
 
+header{
+  position: -webkit-sticky; /*compatible*/
+  position: sticky;
+  top: 0px;
+  padding: 15px 0 5px 0;
+  background-color: #fff;
+}
+header>hr{
+  margin-bottom: 0;
+}
 
 .select{
   margin: 0 auto;
 }
 .select>ul{
+  margin: 0;
   padding: 0;
   text-align: center;
 }
@@ -80,29 +91,20 @@ a.link:focus::before{
   color: hsl(0, 0%, 20%) !important;
 }
 .select li>a{
-  position: relative;
-  color: transparent !important;
-  outline-color: #000;
-  -moz-user-select: none;
-  -webkit-user-select: none;
+  display: inline-block;
+  -moz-transition: color .15s linear, -moz-transform .15s linear; /*compatible*/
+  -webkit-transition: color .15s linear, -webkit-transform .15s linear;
+  transition: color .15s linear, transform .15s linear;
 }
-.select li>a::after{
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: hsl(0, 0%, 60%);
-  -moz-transition: color .15s linear, top .15s linear;/*compatible*/
-  -webkit-transition: color .15s linear, top .15s linear;
-  transition: color .15s linear, top .15s linear;
+.select li:hover>a{
+  -moz-transform: translateY(-3px); /*compatible*/
+  -webkit-transform: translateY(-3px);
+  transform: translateY(-3px);
 }
-.select li:hover>a::after{
-  top: -3px;
-}
-.select li:not([data-checked="true"]):hover>a::after{
+.select li:not([data-checked="true"]):hover>a{
   color: hsl(0, 0%, 85%);
 }
-.select li[data-checked="true"]>a::after{
+.select li[data-checked="true"]>a{
   color: hsl(0, 0%, 20%);
 }
 

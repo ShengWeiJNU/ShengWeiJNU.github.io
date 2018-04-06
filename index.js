@@ -4,8 +4,6 @@ const configInfo = getJSON('config.json');
 configInfo.then(config=>{
 	var navInd = 0;
 	initNav(config, navInd);
-	var navName = config.nav[navInd];
-	getContentPage(config.pages, navName);
 }, errText_=>{
 	new Error(errText_);
 });
@@ -36,6 +34,7 @@ function getJSON(url){
 function initNav(config_, ind_){
 	var items = config_.nav;
 	var nav = document.getElementById('nav');
+	var docEle = document.documentElement;
 	var liEle;
 	var mainContainer = document.getElementById('main-content');
 	for(let i=0; i<items.length; i++){
@@ -46,15 +45,30 @@ function initNav(config_, ind_){
 			content.classList.add('active');
 			mainContainer.appendChild(content);
 		}
-		liEle.innerHTML = `<a href="##" data-text=${items[i]}>${items[i]}</a>`;
+		liEle.innerHTML = `<a href="##">${items[i]}</a>`;
 		liEle.setAttribute('data-router', `/${items[i]}`);
+		// When mousedown on nav item, save current scrollTop val to cuttent content-ele's data-scrolly attr.
+		liEle.addEventListener('mousedown', e_=>{
+			var oldContent = mainContainer.querySelector('.content.active');
+			oldContent.setAttribute('data-scrolly', docEle.scrollTop);
+		});
 		liEle.addEventListener('click', e_=>{
-			nav.querySelector('li[data-checked="true"]').removeAttribute('data-checked');
+			// Change checked nav item.
+			var oldCheckedItem = nav.querySelector('li[data-checked="true"]');
+			// If click same nav item for the second time, scroll document to top.
+			if(oldCheckedItem === e_.currentTarget){
+				docEle.scrollTo(docEle.scrollLeft, 0);
+				return;
+			}
+			oldCheckedItem.removeAttribute('data-checked');
 			e_.currentTarget.setAttribute('data-checked', 'true');
-		
+			// Change actived content-ele, and scroll document to content-ele's data-scrolly attr.
 			var content = getContentPage(config_.pages, items[i]);
-			mainContainer.querySelector('.content.active').classList.remove('active');
+			var oldContent = mainContainer.querySelector('.content.active');
+			oldContent.classList.remove('active');
 			content.classList.add('active');
+			var newScrollY = content.getAttribute('data-scrolly');
+			docEle.scrollTo(docEle.scrollLeft, newScrollY);
 		});
 		nav.appendChild(liEle);
 	}
@@ -71,6 +85,7 @@ function getContentPage(pages_, pagename_){
 		container = document.createElement('div');
 		container.className = 'content';
 		container.setAttribute('data-page', name);
+		container.setAttribute('data-scrollY', '0');
 		let ul = document.createElement('ul');
 		let page = pages_[pagename_];
 		let content = '';
