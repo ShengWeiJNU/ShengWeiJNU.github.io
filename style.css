@@ -29,6 +29,7 @@ body{
   background-color: #fff;
   color: rgb(51, 68, 85);
   font-family: 'microsoft yahei';
+  overflow-y: scroll;
   box-sizing: border-box; /*compatible*/
   box-sizing: border-box;
   box-sizing: border-box;
@@ -45,6 +46,12 @@ a.link::before{
 }
 a.link:hover{
   border-bottom: 1px dashed #000;
+}
+a.link:hover::before{
+  color: brown;
+}
+a.link:focus::before{
+  color: #f00;
 }
 
 
@@ -63,24 +70,40 @@ a.link:hover{
   font-size: 20px;
   color: hsl(0, 0%, 60%);
   cursor: pointer;
-  
-  -moz-transition: color .15s linear;/*compatible*/
-  -webkit-transition: color .15s linear;
-  transition: color .15s linear;
-}
-.select>ul>li:not([data-checked="true"]):hover{
-  color: hsl(0, 0%, 85%);
-}
-.select>ul>li[data-checked="true"]{
-  color: hsl(0, 0%, 20%);
 }
 .select>ul>li:not(:last-child)::after{
   content: '|';
   position: absolute;
   right: -7px;
   font-size: 25px;
-  font-family: '宋体';
+  font-family: '宋体', '黑体';
   color: hsl(0, 0%, 20%) !important;
+}
+.select li>a{
+  position: relative;
+  color: transparent !important;
+  outline-color: #000;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+.select li>a::after{
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: hsl(0, 0%, 60%);
+  -moz-transition: color .15s linear, top .15s linear;/*compatible*/
+  -webkit-transition: color .15s linear, top .15s linear;
+  transition: color .15s linear, top .15s linear;
+}
+.select li:hover>a::after{
+  top: -3px;
+}
+.select li:not([data-checked="true"]):hover>a::after{
+  color: hsl(0, 0%, 85%);
+}
+.select li[data-checked="true"]>a::after{
+  color: hsl(0, 0%, 20%);
 }
 
 .content.active{

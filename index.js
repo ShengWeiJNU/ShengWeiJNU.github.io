@@ -1,4 +1,5 @@
 (function(){
+// Get config infomation from config.json
 const configInfo = getJSON('config.json');
 configInfo.then(config=>{
 	var navInd = 0;
@@ -9,6 +10,7 @@ configInfo.then(config=>{
 	new Error(errText_);
 });
 
+// Get a json file asynchronously
 function getJSON(url){
 	const promise = new Promise((resolve_, reject_)=>{
 		const xhr = new XMLHttpRequest();
@@ -30,6 +32,7 @@ function getJSON(url){
 	return promise;
 }
 
+// When document is loaded, render categories
 function initNav(config_, ind_){
 	var items = config_.nav;
 	var nav = document.getElementById('nav');
@@ -43,7 +46,7 @@ function initNav(config_, ind_){
 			content.classList.add('active');
 			mainContainer.appendChild(content);
 		}
-		liEle.innerHTML = `<a href="##">${items[i]}</a>`;
+		liEle.innerHTML = `<a href="##" data-text=${items[i]}>${items[i]}</a>`;
 		liEle.setAttribute('data-router', `/${items[i]}`);
 		liEle.addEventListener('click', e_=>{
 			nav.querySelector('li[data-checked="true"]').removeAttribute('data-checked');
@@ -58,6 +61,8 @@ function initNav(config_, ind_){
 	return ind_;
 }
 
+// At first, only render the page which is to be shown, then
+// when click other category, render connected content page.
 function getContentPage(pages_, pagename_){
 	var name = '/'+ pagename_;
 	var mainContainer = document.getElementById('main-content');
