@@ -47,30 +47,36 @@ function initNav(config_, ind_){
 		}
 		liEle.innerHTML = `<a href="##">${items[i]}</a>`;
 		liEle.setAttribute('data-router', `/${items[i]}`);
-		// When mousedown on nav item, save current scrollTop val to cuttent content-ele's data-scrolly attr.
+		// When mousedown on a new nav-item, save current content-ele's data-scrolly attr to scrollTop.
 		liEle.addEventListener('mousedown', e_=>{
-			var oldContent = mainContainer.querySelector('.content.active');
-			oldContent.setAttribute('data-scrolly', docEle.scrollTop);
+			var oldCheckedItem = nav.querySelector('li[data-checked="true"]');
+			if(oldCheckedItem !== e_.currentTarget){
+				let oldContent = mainContainer.querySelector('.content.active');
+				oldContent.setAttribute('data-scrolly', docEle.scrollTop);
+			}
 		});
 		liEle.addEventListener('click', e_=>{
 			var oldCheckedItem = nav.querySelector('li[data-checked="true"]');
+			// If the nav-item is already checked, do nothing.
+			if(oldCheckedItem === e_.currentTarget){
+				return;
+			}
+			// Change checked nav item.
+			oldCheckedItem.removeAttribute('data-checked');
+			e_.currentTarget.setAttribute('data-checked', 'true');
+			// Change actived content-ele, and scroll document to content-ele's data-scrolly attr.
+			let oldContent = mainContainer.querySelector('.content.active');
+			oldContent.classList.remove('active');
 			var content = getContentPage(config_.pages, items[i]);
-			if(oldCheckedItem !== e_.currentTarget){
-				// Change checked nav item.
-				oldCheckedItem.removeAttribute('data-checked');
-				e_.currentTarget.setAttribute('data-checked', 'true');
-				// Change actived content-ele, and scroll document to content-ele's data-scrolly attr.
-				let oldContent = mainContainer.querySelector('.content.active');
-				oldContent.classList.remove('active');
-				content.classList.add('active');
-			}
-			var newScrollY = 0;
-			// If not a single click, scroll document to top
-			if(e_.detail === 1){
-				newScrollY = content.getAttribute('data-scrolly');
-			}
+			content.classList.add('active');
+			var newScrollY = content.getAttribute('data-scrolly');
 			docEle.scrollTo(docEle.scrollLeft, newScrollY);
 		});
+		liEle.addEventListener('dblclick', e_=>{
+			var activeContent = mainContainer.querySelector('.content.active');
+			activeContent.setAttribute('data-scrolly', '0');
+			docEle.scrollTo(docEle.scrollLeft, 0);
+		})
 		nav.appendChild(liEle);
 	}
 	return ind_;
