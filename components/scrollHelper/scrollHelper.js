@@ -81,25 +81,27 @@ function createPollInterval(){
 	var moveX, moveY, dis;
 	var pow = Math.pow;
 	var now = Date.now;
+	var isPageBtnTriggered;
 	var id = setInterval(function(){
 		moveX=0, moveY=0;
 		dis = 1 + pow((now()-keyEvtPrototype.keyDnTriggeredTime)/5000, 2)*60;
 		dis = constrain(dis, -70, 70);
 		dis = constrain(dis, -70, 70);
+		isPageBtnTriggered = false;
 		if(keys.codes.length){
 			// Page Up
 			if(keys[33]){
-				let lastPressTime = keyEvtPrototype.lastPgUpActivedTime;
+				let lastPressTime = keyEvtPrototype.lastPgBtnActivedTime;
 				if(lastPressTime===null || (now()-lastPressTime)>=500){
-					keyEvtPrototype.lastPgUpActivedTime = now();
+					isPageBtnTriggered = true;
 					moveY -= scrollEle===document.documentElement ? innerHeight : scrollEle.getBoundingClientRect().height;
 				}
 			}
 			// page Down
 			if(keys[34]){
-				let lastPressTime = keyEvtPrototype.lastPgDnActivedTime;
+				let lastPressTime = keyEvtPrototype.lastPgBtnActivedTime;
 				if(lastPressTime===null || (now()-lastPressTime)>=500){
-					keyEvtPrototype.lastPgDnActivedTime = now();
+					isPageBtnTriggered = true;
 					moveY += scrollEle===document.documentElement ? innerHeight : scrollEle.getBoundingClientRect().height;
 				}
 			}
@@ -120,6 +122,9 @@ function createPollInterval(){
 				moveY += dis;
 			}
 			scrollEle.scrollBy(moveX, moveY);
+			if(isPageBtnTriggered){
+				keyEvtPrototype.lastPgBtnActivedTime = now();
+			}
 		}
 	}, 16);
 	KeyboardEvent.prototype.intervalId = id;
@@ -160,13 +165,10 @@ function keysUp(e_){
 	if(codes.length){
 		createPollInterval();
 	}
-	// If pgUp or pgDn is released, reset lastPgUpActivedTime or lastPgDnActivedTime value.
+	// If pgUp or pgDn is released, reset lastPgBtnActivedTime value.
 	// So that when user click this two keys quickly, we can trigger correctly.
-	if(keyCode === 33){
-		KeyboardEvent.prototype.lastPgUpActivedTime = null;
-	}
-	if(keyCode === 34){
-		KeyboardEvent.prototype.lastPgDnActivedTime = null;
+	if(keyCode===33 || keyCode===34){
+		KeyboardEvent.prototype.lastPgBtnActivedTime = null;
 	}
 	e_.preventDefault();
 }
@@ -347,8 +349,7 @@ ScrollHelper.prototype.open = function(){
 		// When press pageUp and pageDown, we don't want to trigger in a high frequency,
 		// this two attriutes store last time moment when we press such keys, so we can judge
 		// time between two triggers.
-		KeyboardEvent.prototype.lastPgUpActivedTime = null;
-		KeyboardEvent.prototype.lastPgDnActivedTime = null;
+		KeyboardEvent.prototype.lastPgBtnActivedTime = null;
 		// To scroll faster and faster when the pressedTime grows. We save the time when keyDown is
 		// triggered.
 		KeyboardEvent.prototype.keyDnTriggeredTime = null;
@@ -364,8 +365,7 @@ ScrollHelper.prototype.open = function(){
 		delete MouseEvent.prototype.helperTargetEle;
 		delete KeyboardEvent.prototype.keys;
 		delete KeyboardEvent.prototype.intervalId;
-		delete KeyboardEvent.prototype.lastPgUpActivedTime;
-		delete KeyboardEvent.prototype.lastPgDnActivedTime;
+		delete KeyboardEvent.prototype.lastPgBtnActivedTime;
 		delete KeyboardEvent.prototype.keyDnTriggeredTime;
 	}
 }

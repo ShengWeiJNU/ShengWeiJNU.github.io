@@ -45,7 +45,7 @@ function initNav(config_, ind_){
 			content.classList.add('active');
 			mainContainer.appendChild(content);
 		}
-		liEle.innerHTML = `<a href="##">${items[i]}</a>`;
+		liEle.innerHTML = `<a href="javascript:void(0)">${items[i]}</a>`;
 		liEle.setAttribute('data-router', `/${items[i]}`);
 		// When mousedown on a new nav-item, save current content-ele's data-scrolly attr to scrollTop.
 		liEle.addEventListener('mousedown', e_=>{
@@ -55,6 +55,7 @@ function initNav(config_, ind_){
 				oldContent.setAttribute('data-scrolly', docEle.scrollTop);
 			}
 		});
+		// When click a new nav-item, change checked nav-item and content.
 		liEle.addEventListener('click', e_=>{
 			var oldCheckedItem = nav.querySelector('li[data-checked="true"]');
 			// If the nav-item is already checked, do nothing.
@@ -72,10 +73,14 @@ function initNav(config_, ind_){
 			var newScrollY = content.getAttribute('data-scrolly');
 			docEle.scrollTo(docEle.scrollLeft, newScrollY);
 		});
+		// When double-click the checked nav-item, scroll document to top.
 		liEle.addEventListener('dblclick', e_=>{
-			var activeContent = mainContainer.querySelector('.content.active');
-			activeContent.setAttribute('data-scrolly', '0');
-			docEle.scrollTo(docEle.scrollLeft, 0);
+			var oldContent = mainContainer.querySelector('.content.active');
+			var content = getContentPage(config_.pages, items[i]);
+			if(oldContent === content){
+				content.setAttribute('data-scrolly', '0');
+				docEle.scrollTo(docEle.scrollLeft, 0);
+			}
 		})
 		nav.appendChild(liEle);
 	}
