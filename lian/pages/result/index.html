@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+	<title>问卷</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script type="text/javascript" src="js/html2canvas.min.js"></script>
+</head>
+<body>
+<img class="body-bg" src="images/bg.png" />
+<canvas id="canvas"></canvas>
+<div class="main">
+	<img class="main-bg" src="images/bg.png" />
+	<div class="content">
+		<img class="content-bg" src="images/content_bg.png" />
+		<div class="ticket">
+			<img class="ticket_bg" src="images/ticket_unknownsex.png" />
+		</div>
+		<div class="perception">
+			<img class="percept_bg" src="images/percept_2d.png">
+		</div>
+		<div class="conclusion">
+			<img class="conclusion_bg" src="images/conclusion_4d_5.png" />
+		</div>
+	</div>
+</div>
+<!-- <div class="screenshot"> -->
+	<img class="shot-bg" />
+<!-- </div> -->
+<!-- <input type="button" class="page-hider" value="23333input" />
+<input type="button" style="position: relative;" value="input" />
+<button style="position: relative;">button</button> -->
+<script type="text/javascript">
+window.onload = function(e_){
+	var main = document.querySelector('.main');
+	var bg = main.querySelector('.main-bg');
+	var content = main.querySelector('.content');
+	var ticket = content.querySelector('.ticket');
+	var ticketImg = ticket.querySelector('.ticket_bg');
+	var ow = innerWidth - 30;
+	var oh = innerHeight * 0.94;
+	var nw=ow, nh=oh;
+	if(innerWidth <= innerHeight){
+		if(oh*0.560 < innerWidth){
+			nw = oh*0.560;
+		}
+	}
+	content.style.width = nw + 'px';
+	nh = +getComputedStyle(content).width.slice(0, -2) * 1.786;
+	content.style.height = nh + 'px';
+	main.style.width = ticketImg.offsetWidth + 10 + 'px';
+	main.style.height = nh/0.94 + 'px';
+	ticket.style.marginTop = 0.05*nh + 'px';
+
+	bg.classList.add('show');
+	html2canvas(main, {
+		'width': main.offsetWidth,
+		'height': main.offsetHeight,
+		'canvas': document.getElementById('canvas')
+	}).then(function(canvas) {
+		// var shot = document.querySelector('.screenshot');
+		// var bg = shot.querySelector('.shot-bg');
+		var bg = document.querySelector('.shot-bg');
+		// shot.classList.add('show');
+		bg.src = canvas.toDataURL();
+		bg.style.width = main.offsetWidth + 'px';
+		bg.style.height = main.offsetHeight + 'px';
+		document.body.removeChild(main);
+	});
+
+	// document.querySelector('.screenshot').addEventListener('click', function(e_){
+	// 	var shot = e_.currentTarget;
+	// 	if(shot.className.indexOf('show') === -1){
+	// 		shot.classList.add('show');
+	// 	}else{
+	// 		shot.classList.remove('show');
+	// 	}
+	// 	e_.stopPropagation();
+	// });
+	// function longPressHandler(e_){
+	// 	bg.classList.add('show');
+	// 	window.onlongpress = true;
+	// 	window.timer = setTimeout(function(){
+	// 		if(window.onlongpress){
+	// 			html2canvas(main, {
+	// 				'width': main.offsetWidth,
+	// 				'height': main.offsetHeight,
+	// 				'canvas': document.getElementById('canvas')
+	// 			}).then(function(canvas) {
+	// 				var shot = document.querySelector('.screenshot');
+	// 				var bg = shot.querySelector('.shot-bg');
+	// 				shot.classList.add('show');
+	// 				bg.src = canvas.toDataURL();
+	// 			});
+	// 		}
+	// 	}, 1000);
+	// 	e_.stopPropagation();
+	// }
+	// function moveHandler(e_){
+	// 	if(e_.buttons === 0){
+	// 		upHandler();
+	// 	}
+	// }
+	// function upHandler(e_){
+	// 	delete window.onlongpress;
+	// 	clearTimeout(window.timer);
+	// 	delete window.timer;
+	// }
+	// var hider = document.querySelector('body .page-hider');
+	// hider.addEventListener('mousedown', longPressHandler);
+	// hider.addEventListener('mousemove', moveHandler);
+	// hider.addEventListener('mouseup', upHandler);
+}
+window.onresize = function(e_){
+	var main = document.querySelector('.main');
+	var bg = main.querySelector('.main-bg');
+	var content = main.querySelector('.content');
+	var ticket = content.querySelector('.ticket');
+	var ticketImg = ticket.querySelector('.ticket_bg');
+	var ow = innerWidth - 30;
+	var oh = innerHeight * 0.94;
+	var nw=ow, nh=oh;
+	if(innerWidth <= innerHeight){
+		if(oh*0.560 < innerWidth){
+			nw = oh*0.560;
+		}
+	}
+	content.style.width = nw + 'px';
+	nh = +getComputedStyle(content).width.slice(0, -2) * 1.786;
+	content.style.height = nh + 'px';
+	main.style.width = ticketImg.offsetWidth + 10 + 'px';
+	main.style.height = nh/0.94 + 'px';
+	ticket.style.marginTop = 0.05*nh + 'px';
+}
+</script>
+</body>
+</html>

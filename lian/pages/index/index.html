@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+	<title>问卷</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="../../js/vconsole.min.js"></script>
+	<script src="../../js/html2canvas.min.js"></script>
+</head>
+<body>
+<div class="content">
+	<div class="page anime-container" data-path="/">
+		<div class="anime">
+			<img async data-src="images/anime/anime1.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime2.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime3.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime4.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime5.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime6.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime7.gif" />
+			<div class="trigger-container">
+				<div id="trigger-zone">
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime8.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime9.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime10.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime11.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime12.gif" />
+		</div>
+		<div class="anime">
+			<img async data-src="images/anime/anime13.gif" />
+		</div>
+	</div>
+	<div class="page startTest" data-path="/start">
+		<div class="page-bg">
+			<img async data-src="images/start/bg.gif" />
+		</div>
+		<div class="para">
+			<img class="para-img" async data-src="images/start/para.png" />
+		</div>
+		<div class="input-area">
+			<input id="username" type="text" maxlength="13" placeholder="签上您的名字接收信件">
+		</div>
+		<div class="button-area">
+			<input id="enter" type="button" maxlength="13" placeholder="签上您的名字接收信件">
+			<img  async data-src="images/start/tip.png" />
+		</div>
+		<div class="tooltip"></div>
+	</div>
+	<div class="page calculate" data-path="/calculate">
+		<img class="page-bg" async data-src="images/calculate/page-bg.png" />
+		<img class="loading-bg" async data-src="images/calculate/quietpoint.gif" />
+		<img class="sentence" async data-src="images/calculate/shake.png" />
+	</div>
+	<div class="page sex" data-path="/sex">
+		<img class="sex-bg" async data-src="images/sex/bg.png" />
+		<div class="sex-item" data-sex="female">
+		</div>
+		<div class="sex-item" data-sex="male">
+		</div>
+		<div class="sex-item" data-sex="unknown">
+		</div>
+	</div>
+</div>
+<canvas id="canvas" style="display: none;"></canvas>
+<script type="text/javascript">
+// window.vConsole = new window.VConsole({
+//   defaultPlugins: ['system', 'network', 'element', 'storage'], // 可以在此设定要默认加载的面板
+//   maxLogNumber: 1000,
+//   // disableLogScrolling: true,
+//   onReady: function() {
+//     console.log('vConsole is ready.');
+//   },
+//   onClearLog: function() {
+//     console.log('on clearLog');
+//   }
+// });
+
+(function(){
+	// init page
+	var path = validatePath(sessionStorage.getItem('path'));
+	if(!path.legal || path.type==='result' || path.type==='default'){
+		sessionStorage.setItem('path', '/');
+		sessionStorage.setItem('username', '佚名');
+		sessionStorage.setItem('sex', 'unknown');
+		sessionStorage.setItem('scores', '[]');
+	}else if(path.type === 'question'){
+		sessionStorage.setItem('scores', '[]');
+	}
+	// sessionStorage.setItem('path', '/calculate');/*test*/
+	var __configureJSON = null;
+	// var __Data = {
+	// 	'username': null,
+	// 	'sex': 'male',
+	// 	'scores': []
+	// };
+	var genQuesPageInd;
+
+	window.onload = function(e_){
+		setBodySize();
+		loadAsyncImgs();
+		getConfiguration()
+		.then(function(res_){
+			genQuesPageInd = (function(){
+				var existQuesList = {length: 0};
+				var maxLen = __configureJSON['ques'].length;
+				function f(){
+					var ind;
+					if(existQuesList.length >= maxLen){
+						return null;
+					}
+					while(1){
+						ind = ~~(Math.random()*maxLen) + 1;
+						if(existQuesList[ind] !== undefined){
+							continue;
+						}else{
+							existQuesList[ind] = ind;
+							existQuesList.length ++;
+							break;
+						}
+					}
+					// console.log(ind);
+					return ind;
+				}
+				f.add = function(ind_){
+					if(existQuesList.length<maxLen && existQuesList[ind_]===undefined){
+						existQuesList[ind_] = ind_;
+						return ind_;
+					}else{
+						return null;
+					}
+				}
+				return f;
+			})();
+			var path = sessionStorage.getItem('path');
+			path = path===null ? '/' : path;
+			sessionStorage.setItem('path', path);
+			navTo(path);
+			document.querySelector('#trigger-zone').onclick = function(e_){
+				var body = document.body;
+				var content = body.querySelector('.content');
+				var duration = getComputedStyle(body).transitionDuration.match(/(\d*\.?\d*)/g);
+				duration = duration!==null ? +duration[0]*1000 : 0;
+				navTo('/start');
+			};
+		})
+		.catch(function(err_){
+			console.error(err_);
+		});
+	}
+	window.onresize = function(e_){
+		setBodySize();
+		setTextSize();
+	}
+
+	function setTextSize(){
+		var img = document.querySelector('.page.result .page-bg');
+		var username = document.querySelector('.page.result .username');
+		if(username === null){
+			return;
+		}
+		var h = img.getBoundingClientRect().height;
+		console.log(h);
+		var fontsize = h * 0.0221;
+		username.setAttribute('style', 'font-size: '+ fontsize +'px;');
+	}
+
+	function setBodySize(){
+		var body = document.body;
+		var inp = document.querySelectorAll('input[data-focus]');
+		if(inp.length){
+			return;
+		}
+		var boundRect = body.getBoundingClientRect();
+		var maxw = +getComputedStyle(body).maxWidth.slice(0, -2);
+		var minw = +getComputedStyle(body).minWidth.slice(0, -2);
+		maxw = maxw<=innerWidth ? maxw : innerWidth;
+		if(minw >= innerWidth){
+			body.style.minWidth = innerWidth + 'px';
+			minw = innerWidth;
+		}
+		var ow = boundRect.width;
+		var oh = boundRect.height;
+		var nw=maxw, nh=innerHeight;
+		if(innerHeight*0.562996 > maxw){
+			nw = maxw;
+			nh = nw / 0.562996;
+		}
+		else if(innerHeight*0.562996 < minw){
+			nw = minw;
+			nh = nw / 0.562996;
+		}
+		else{
+			nw = innerHeight * 0.562996;
+			nh = innerHeight;
+		}
+		body.style.width = nw + 'px';
+		body.style.height = nh + 'px';
+	}
+
+	function loadAsyncImgs(){
+		var imgs = document.querySelectorAll('img[async][data-src]');
+		console.log('有%d个图片资源待加载', imgs.length);
+		for(var i=imgs.length-1; i>=0; i--){
+			var v = imgs[i];
+			(function(ele_){
+				var src = './'+ ele_.getAttribute('data-src');
+				new Promise(function(resolve_, reject_){
+					var xhr = new XMLHttpRequest();
+					xhr.open('GET', src);
+					xhr.responseType = 'blob';
+					xhr.onreadystatechange = function(){
+						if(xhr.readyState !== 4){
+							return;
+						}else if(xhr.readyState===4 && xhr.status===200){
+							resolve_(xhr.response);
+						}
+					}
+					xhr.onerror = function(err_){
+						reject_(err_);
+					}
+					xhr.send();
+				}).then(function(blob_){
+					var url = URL.createObjectURL(blob_);
+					ele_.src = url;
+					ele_.removeAttribute('async');
+					ele_.removeAttribute('data-src');
+				}).catch(function(err_){
+					console.error(err_);
+				});			
+			})(v);
+		}
+	}
+
+	function getConfiguration(){
+		return new Promise(function(resolve_, reject_){
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', './config.json');
+			xhr.responseType = 'json';
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState !== 4){
+					return;
+				}else if(xhr.readyState===4 && xhr.status===200){
+					__configureJSON = xhr.response;
+					resolve_(xhr.response);
+				}else{
+					reject_(xhr.response);
+				}
+			}
+			xhr.send();
+		});
+	}
+
+	function validatePath(path_){
+		var path = String(path_).trim();
+		if(path === '/'){
+			return {
+				legal: true,
+				path: path,
+				type: 'default'
+			}
+		}
+		if(path==='/anime' || path==='/calculate' || path==='/result' || path==='/start' || path==='/sex'){
+			return {
+				legal: true,
+				path: path,
+				type: path.slice(1)
+			}
+		}
+		if(path.match(/\/question\/(\d{1,})$/) !== null){
+			return {
+				legal: true,
+				path: path,
+				type: 'question'
+			}
+		}
+		return {
+			legal: false,
+			path: '/',
+			type: 'redirect'
+		};
+	}
+
+	function navTo(path_){
+		var html = document.documentElement;
+		var curPage = html.querySelector('.page.active');
+		var path = path_.trim();
+		var tarPage = html.querySelector('.page[data-path="'+ path +'"]');
+		if(tarPage === null){
+			var p = validatePath(path);
+			if(p.legal){
+				if(p.type === 'result'){
+					navTo(createResultPage());
+				}else if(p.type === 'question'){
+					var ind = path.match(/\/question\/(\d{1,})$/)[1];
+					genQuesPageInd.add(ind);
+					navTo(createQuestionPage(ind));
+				}
+			}else{
+				sessionStorage.setItem('path', '/');
+				navTo('/');
+			}
+			return;
+		}
+		if(curPage === null){
+			curPage = tarPage;
+		}
+		sessionStorage.setItem('path', path_);
+		var traDur = getComputedStyle(html).transitionDuration.match(/(\d*\.?\d*)/g);
+		traDur = traDur!==null ? +traDur[0]*1000 : 0;
+		html.classList.add('hide');
+		html.classList.add('forbidOverflow');
+		curPage.classList.add('run-out');
+		setTimeout(function(){
+			curPage.classList.remove('active');
+			curPage.classList.remove('run-out');
+			tarPage.classList.add('active');
+			if(path === '/result'){
+				setTextSize();
+				var page = document.querySelector('.content .page.result');
+				var bg = page.querySelector('.page-bg');
+				bg.classList.remove('hide');
+				html2canvas(page, {
+					'width': page.getBoundingClientRect().width,
+					'height': page.getBoundingClientRect().height,
+					'canvas': document.getElementById('canvas')
+				}).then(function(canvas) {
+					bg.src = canvas.toDataURL();
+					page.innerHTML = bg.outerHTML;
+				});
+			}
+			setTimeout(function(){
+				tarPage.classList.add('run-in');
+				html.classList.remove('hide');
+				var runInDur = getComputedStyle(tarPage).animationDuration.match(/(\d*\.?\d*)/g);
+				runInDur = runInDur!==null ? +runInDur[0]*1000 : 0;
+				setTimeout(function(){
+					tarPage.classList.remove('run-in');
+					html.classList.remove('forbidOverflow');
+				}, runInDur);
+			}, 150);
+		}, traDur);
+	}
+
+
+	// start page
+	var btn = document.getElementById('enter');
+	var inp = document.getElementById('username');
+	var tooltip = document.querySelector('.tooltip');
+	inp.onfocus = function(e_){
+		e_.currentTarget.setAttribute('data-focus', '');
+	}
+	inp.onblur = function(e_){
+		e_.currentTarget.removeAttribute('data-focus');
+	}
+	btn.onclick = function(e_){
+		var val = inp.value;
+		var name = val.trim();
+		if(name.length === 0){
+			tooltip.classList.add('show');
+		}else{
+			// __Data.username = val;
+			sessionStorage.setItem('username', val);
+			var ind = genQuesPageInd();
+			var path = createQuestionPage(ind);
+			navTo(path);
+		}
+	};
+	tooltip.onclick = function(e_){
+		e_.currentTarget.classList.remove('show');
+	}
+
+	function choose(e_){
+		var val = +e_.currentTarget.getAttribute('data-value');
+		var scores = JSON.parse(sessionStorage.getItem('scores'));
+		scores = scores===null ? [] : scores;
+		scores.push(val);
+		sessionStorage.setItem('scores', JSON.stringify(scores));
+		// __Data.scores.push(val);
+		// console.log(__Data.scores);
+		if(scores.length < 6){
+		// if(__Data.scores.length < 6){
+			var ind = genQuesPageInd();
+			var path = createQuestionPage(ind);
+			navTo(path);
+		}else{
+			// var score = __Data.scores.reduce(function(v_, u_){
+			// 	return v_ + u_;
+			// });
+			// location.href = 'file:///H:/lian/pages/result/index.html?username='+ encodeURIComponent(__Data.username) +'&score='+ score;
+			// __Data = null;
+
+			navTo('/sex');
+		}
+	}
+
+	// question option choose
+	var options = document.querySelectorAll('.question>div');
+	options.forEach(function(v_, i_, arr_){
+		v_.addEventListener('click', choose);
+	});
+
+	var sexitems = document.querySelectorAll('.sex .sex-item');
+	sexitems.forEach(function(v_, i_, arr_){
+		v_.addEventListener('click', function(e_){
+			var sex = e_.currentTarget.getAttribute('data-sex');
+			sessionStorage.setItem('sex', sex);
+			navTo('/calculate');
+		});
+	});
+
+	// shake phone on calculate page
+	var abs = Math.abs;
+	var lastTriggerTime = null;
+	var shakeSide = {
+		left: 0,
+		right: 0
+	}
+	// var deg = 0;
+	window.ondevicemotion = function(e_){
+		var calcPage = document.querySelector('.page.calculate');
+		if(!calcPage){
+			return;
+		}
+		// var pagebg = calcPage.querySelector('.page-bg');
+		var animeGif = calcPage.querySelector('.loading-bg');
+		var sentence = calcPage.querySelector('.sentence');
+		if(lastTriggerTime === null){
+			lastTriggerTime = e_.timeStamp;
+			animeGif.src = 'images/calculate/excitingpoint.gif';
+			return;
+		}else if(e_.timeStamp-lastTriggerTime <= 150){
+			return;
+		}
+		var alpha = e_.rotationRate.gamma;
+		// deg = alpha * 4;
+		// deg = abs(deg)>=65 ? 65*dir : deg;
+		// if(abs(deg) <= 1){
+			// deg = 0;
+		// }
+		// var dir = deg>0 ? 1 : (deg<0?-1:0);
+		// if(deg !== 0){
+			// pagebg.style.setProperty('transform', 'rotate('+ deg +'deg)');
+		// }
+		// deg /= 6;
+		if(abs(alpha) >= 8){
+			lastTriggerTime = e_.timeStamp;
+			if(alpha > 0){
+				// 向左
+				shakeSide.left ++;
+			}else{
+				// 向右
+				shakeSide.right ++;
+			}
+			if(shakeSide.left>=3 && shakeSide.right>=3){
+				sentence.src = 'images/calculate/calc.gif';
+				setTimeout(function(){
+					navTo('/result');
+				}, 1000);
+			}
+		}
+	}
+
+	function createQuestionPage(index_){
+		var content = document.querySelector('.content');
+		var checkPage = content.querySelector('.page[data-path="/question/'+ index_ +'"]');
+		if(checkPage !== null){
+			return '/question/'+ index_;
+		}
+		var page = document.createElement('div');
+		content.appendChild(page);
+		var infoObj = __configureJSON['ques'][index_-1];
+		var valArr = infoObj['level'];
+		var posObj = infoObj['loc'];
+		page.outerHTML = '<div class="page question" style="background-image: url(\'images/questions/'+ index_ +'/bg.png\'), url(\'images/questions/bg.gif\');" data-path="/question/'+ index_ +'">\
+		<div class="optionA" style="width:'+ posObj['A'][0] +'%; height:'+ posObj['A'][1] +'%; left:'+ posObj['A'][2] +'%; top:'+ posObj['A'][3] +'%" data-value="'+ valArr[0] +'"></div>\
+		<div class="optionB" style="width:'+ posObj['B'][0] +'%; height:'+ posObj['B'][1] +'%; left:'+ posObj['B'][2] +'%; top:'+ posObj['B'][3] +'%" data-value="'+ valArr[1] +'"></div>\
+		<div class="optionC" style="width:'+ posObj['C'][0] +'%; height:'+ posObj['C'][1] +'%; left:'+ posObj['C'][2] +'%; top:'+ posObj['C'][3] +'%" data-value="'+ valArr[2] +'"></div></div>';
+		// Because we has set outerHTML of the new page element, so we need to reget the page element.
+		page = content.querySelector('.page[data-path="/question/'+ index_ +'"]');
+		var options = page.children;
+		for(var i=options.length-1; i>=0; i--){
+			options[i].addEventListener('click', choose);
+		}
+		return '/question/'+ index_;
+	}
+
+	function createResultPage(){
+		var content = document.querySelector('.content');
+		var checkPage = content.querySelector('.page[data-path="/result"]');
+		if(checkPage !== null){
+			return '/result';
+		}
+		var page = document.createElement('div');
+		content.appendChild(page);
+		var info = {
+			// 'name': __Data.username,
+			'name': sessionStorage.getItem('username'),
+			// 'ticket': 'ticket_'+ __Data.sex,
+			'ticket': 'ticket_'+ sessionStorage.getItem('sex'),
+			'dimension': 2 + ~~(Math.random()*3),
+			get percept(){
+				return 'percept_'+ this.dimension +'d';
+			},
+			get conclude(){
+				return 'conclusion_'+ this.dimension +'d_'+ (1+~~(Math.random()*5));
+			}
+		}
+		page.outerHTML = '	<div class="page result" data-path="/result">\
+		<img class="page-bg hide" async data-src="images/result/bg.png" />\
+		<img class="content-bg" async data-src="images/result/content_bg.png" />\
+		<img class="ticket-bg" async data-src="images/result/'+ info.ticket +'.png" />\
+		<img class="percept-bg" async data-src="images/result/'+ info.percept +'.png" />\
+		<img class="conclude-bg" async data-src="images/result/'+ info.conclude +'.png" />\
+		<span class="username">'+ info.name +'</span>\
+		</div>';
+		loadAsyncImgs();
+		return '/result';
+	}
+})();
+</script>
+</body>
+</html>

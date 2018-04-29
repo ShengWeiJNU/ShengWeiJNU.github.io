@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Html2Img</title>
+<style type="text/css">
+.outline {
+    outline: 2px solid red;
+    outline-offset: -2px;
+}
+*{
+	background-image: url('0.jpg');
+	background-repeat: no-repeat;
+}
+img:first-child{
+	width: 50px;
+	height: 50px;
+}
+</style>
+</head>
+<body>
+<div id="cmBox" class="c-m-box">
+    <div class="c-m-list">
+        <img src="0.jpg" alt="长天" class="c-m-img" />
+        <div class="c-m-name">长天</div>
+        <div class="c-m-title">对网文潮流具有极敏锐嗅觉...</div>
+    </div>
+</div>
+<script type="text/javascript">
+var img = new Image();
+document.body.appendChild(img);
+
+// 实例页面的交互代码
+var eleBox = document.getElementById('cmBox');
+// hover outline
+eleBox.addEventListener('mouseover', function (e_) {
+	var ele = document.elementFromPoint(e_.clientX, e_.clientY);
+    if (ele) {
+        ele.classList.add('outline');
+    }
+});
+eleBox.addEventListener('mouseout', function (event) {
+    var eleOutline = eleBox.querySelector('.outline');
+    if (eleOutline) {
+        eleOutline.classList.remove('outline');    
+    }
+});
+// 点击并下载图片
+var img = new Image();
+document.body.appendChild(img);
+eleBox.addEventListener('click', function (e_) {
+	// 复制DOM节点
+	var dom = e_.currentTarget;
+	var cloneDom = dom.cloneNode(true);
+	cloneDom.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+	cloneDom.classList.remove('outline');
+
+	// 如果有图片，变成base64
+	var imgDom = null;
+	if (cloneDom.tagName.toLowerCase() == 'img') {
+	    imgDom = cloneDom;
+	} else {
+	    // 这里就假设一个图片，多图自己遍历转换下就好了
+	    imgDom = cloneDom.querySelector('img');
+	}
+
+	if (imgDom) {
+		var canvas = document.createElement('canvas');
+		var ctx = canvas.getContext('2d');
+		canvas.width = imgDom.width;
+		canvas.height = imgDom.height;
+		ctx.drawImage(imgDom, 0, 0);
+		imgDom.src = canvas.toDataURL()
+	}
+
+	// 图片地址显示为DOM转换的svg
+	img.src = 'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="' + dom.offsetWidth + '" height="' + dom.offsetHeight + '"><foreignObject x="0" y="0" width="100%" height="100%">'+ 
+	    new XMLSerializer().serializeToString(cloneDom).replace(/#/g, '%23').replace(/\n/g, '%0A') +
+	    document.querySelector('style').outerHTML +
+	 '</foreignObject></svg>';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+询问性别页结束后，整个页面缩小，到中间一个圆点坐标（481,320）
+（这时背景+2张背景gif已经在这个下面了）
+
+播放一次pointsize.gif，结束后循环播放quietpoint和摇一摇手机以获得结果.gif
+
+用户摇一摇后
+quietpoint.gif变成excitingpoint.gif，
+摇一摇手机以获得结果.gif变成正在计算结果.gif
+
+
