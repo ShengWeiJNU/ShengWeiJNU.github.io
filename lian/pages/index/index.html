@@ -65,10 +65,10 @@
 			<img class="para-img" async data-src="images/start/para.png" />
 		</div>
 		<div class="input-area">
-			<input id="username" type="text" maxlength="13" placeholder="签上您的名字接收信件">
+			<input id="username" type="text" maxlength="13" placeholder="签上您的名字接收信件" />
 		</div>
 		<div class="button-area">
-			<input id="enter" type="button" maxlength="13" placeholder="签上您的名字接收信件">
+			<input id="enter" type="button" />
 			<img  async data-src="images/start/tip.png" />
 		</div>
 		<div class="tooltip"></div>
@@ -90,17 +90,17 @@
 </div>
 <canvas id="canvas" style="display: none;"></canvas>
 <script type="text/javascript">
-// window.vConsole = new window.VConsole({
-//   defaultPlugins: ['system', 'network', 'element', 'storage'], // 可以在此设定要默认加载的面板
-//   maxLogNumber: 1000,
-//   // disableLogScrolling: true,
-//   onReady: function() {
-//     console.log('vConsole is ready.');
-//   },
-//   onClearLog: function() {
-//     console.log('on clearLog');
-//   }
-// });
+window.vConsole = new window.VConsole({
+  defaultPlugins: ['system', 'network', 'element', 'storage'], // 可以在此设定要默认加载的面板
+  maxLogNumber: 1000,
+  // disableLogScrolling: true,
+  onReady: function() {
+    console.log('vConsole is ready.');
+  },
+  onClearLog: function() {
+    console.log('on clearLog');
+  }
+});
 
 (function(){
 	// init page
@@ -169,6 +169,8 @@
 				duration = duration!==null ? +duration[0]*1000 : 0;
 				navTo('/start');
 			};
+			var urls = ['images/questions/1/bg.png','images/questions/2/bg.png','images/questions/3/bg.png','images/questions/4/bg.png','images/questions/5/bg.png','images/questions/6/bg.png','images/questions/7/bg.png','images/questions/8/bg.png','images/questions/9/bg.png','images/questions/10/bg.png','images/questions/11/bg.png','images/questions/12/bg.png','images/questions/13/bg.png','images/questions/14/bg.png','images/questions/15/bg.png','images/questions/bg.gif','images/result/bg.png','images/result/content_bg.png','images/result/ticket_male.png','images/result/ticket_female.png','images/result/ticket_unknown.png']
+			loadAsyncFromURLs(urls);
 		})
 		.catch(function(err_){
 			console.error(err_);
@@ -255,6 +257,35 @@
 					console.error(err_);
 				});			
 			})(v);
+		}
+	}
+
+	function loadAsyncFromURLs(urlarr_){
+		var imgs = urlarr_;
+		console.log('有%d个url资源待加载', imgs.length);
+		for(var i=imgs.length-1; i>=0; i--){
+			(function(src_){
+				new Promise(function(resolve_, reject_){
+					var xhr = new XMLHttpRequest();
+					xhr.open('GET', src_);
+					xhr.responseType = 'blob';
+					xhr.onreadystatechange = function(){
+						if(xhr.readyState !== 4){
+							return;
+						}else if(xhr.readyState===4 && xhr.status===200){
+							resolve_(xhr.response);
+						}
+					}
+					xhr.onerror = function(err_){
+						reject_(err_);
+					}
+					xhr.send();
+				}).then(function(blob_){
+					console.log('url load successfully');
+				}).catch(function(err_){
+					console.error(err_);
+				});			
+			})(imgs[i]);
 		}
 	}
 
@@ -391,6 +422,8 @@
 			var path = createQuestionPage(ind);
 			navTo(path);
 		}
+		inp.parentNode.removeChild(inp);
+		console.log(document.getElementById('username'));
 	};
 	tooltip.onclick = function(e_){
 		e_.currentTarget.classList.remove('show');
@@ -482,7 +515,7 @@
 				sentence.src = 'images/calculate/calc.gif';
 				setTimeout(function(){
 					navTo('/result');
-				}, 2500);
+				}, 3000);
 			}
 		}
 	}
