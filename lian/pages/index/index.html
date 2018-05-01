@@ -380,8 +380,8 @@ window.vConsole = new window.VConsole({
 				html2canvas(page, {
 					'width': page.getBoundingClientRect().width,
 					'height': page.getBoundingClientRect().height,
-					'canvas': document.getElementById('canvas'),
-					'foreignObjectRendering': true
+					'canvas': document.getElementById('canvas')
+					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
 					bg.src = canvas.toDataURL();
 					page.innerHTML = bg.outerHTML;
