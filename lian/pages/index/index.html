@@ -380,7 +380,8 @@ window.vConsole = new window.VConsole({
 				html2canvas(page, {
 					'width': page.getBoundingClientRect().width,
 					'height': page.getBoundingClientRect().height,
-					'canvas': document.getElementById('canvas')
+					'canvas': document.getElementById('canvas'),
+					'foreignObjectRendering': true
 				}).then(function(canvas) {
 					bg.src = canvas.toDataURL();
 					page.innerHTML = bg.outerHTML;
@@ -415,13 +416,13 @@ window.vConsole = new window.VConsole({
 		var name = val.trim();
 		if(name.length === 0){
 			tooltip.classList.add('show');
-		}else{
-			// __Data.username = val;
-			sessionStorage.setItem('username', val);
-			var ind = genQuesPageInd();
-			var path = createQuestionPage(ind);
-			navTo(path);
+			return;
 		}
+		// __Data.username = val;
+		sessionStorage.setItem('username', val);
+		var ind = genQuesPageInd();
+		var path = createQuestionPage(ind);
+		navTo(path);
 		inp.value = '';
 		inp.parentNode.removeChild(inp);
 		console.log(document.getElementById('username'));
