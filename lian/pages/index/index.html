@@ -383,11 +383,12 @@ window.vConsole = new window.VConsole({
 					'canvas': document.getElementById('canvas')
 					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
-					bg.src = canvas.toDataURL();
 					// page.innerHTML = bg.outerHTML;
 					page.innerHTML = '';
+					var img = new Image();
+					img.src = canvas.toDataURL();
 					// <img class="page-bg hide" async data-src="images/result/bg.png" />;
-					page.appendChild(bg);
+					page.appendChild(img);
 					console.log('toDataURL down');
 				});
 			}
