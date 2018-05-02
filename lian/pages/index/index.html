@@ -113,7 +113,7 @@ window.vConsole = new window.VConsole({
 	}else if(path.type === 'question'){
 		sessionStorage.setItem('scores', '[]');
 	}
-	// sessionStorage.setItem('path', '/result');/*test*/
+	sessionStorage.setItem('path', '/result');/*test*/
 	var __configureJSON = null;
 	// var __Data = {
 	// 	'username': null,
@@ -573,15 +573,14 @@ window.vConsole = new window.VConsole({
 		var urls = ["images/result/bg.png", "images/result/content_bg.png", "images/result/"+ info.ticket +".png", "images/result/"+ info.percept +".png", "images/result/"+ info.conclude +".png"];
 		console.log(urls);
 		loadAsyncFromURLs(urls);
-		page.outerHTML = '	<div class="page result" data-path="/result">\
-		<img class="page-bg hide" src='+ urls[0] +' />\
+		page.outerHTML = '<div class="page result" data-path="/result">\
+		<img class="page-bg hide" src="'+ urls[0] +'" />\
 		<img class="content-bg" src='+ urls[1] +' />\
 		<img class="ticket-bg" src='+ urls[2] +' />\
 		<img class="percept-bg" src='+ urls[3] +' />\
 		<img class="conclude-bg" src='+ urls[4] +' />\
 		<span class="username">'+ info.name +'</span>\
 		</div>';
-		content.appendChild(page);
 		return '/result';
 	}
 })();
