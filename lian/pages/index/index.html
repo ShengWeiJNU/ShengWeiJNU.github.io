@@ -182,13 +182,13 @@ window.vConsole = new window.VConsole({
 	}
 
 	function setTextSize(){
-		var img = document.querySelector('.page.result .page-bg');
-		var username = document.querySelector('.page.result .username');
-		if(username === null){
+		var result = document.querySelector('.page.result.active');
+		if(result === null){
 			return;
 		}
+		var img = result.querySelector('.page-bg');
+		var username = result.querySelector('.username');
 		var h = img.getBoundingClientRect().height;
-		console.log(h);
 		var fontsize = h * 0.0221;
 		username.setAttribute('style', 'font-size: '+ fontsize +'px;');
 	}
@@ -383,7 +383,7 @@ window.vConsole = new window.VConsole({
 					'canvas': document.getElementById('canvas')
 					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
-					bg.src = canvas.toDataURL();
+					// bg.src = canvas.toDataURL();
 					// page.innerHTML = bg.outerHTML;
 					// page.innerHTML = '';
 					// <img class="page-bg hide" async data-src="images/result/bg.png" />;
@@ -429,7 +429,6 @@ window.vConsole = new window.VConsole({
 		navTo(path);
 		inp.value = '';
 		inp.parentNode.removeChild(inp);
-		console.log(document.getElementById('username'));
 	};
 	tooltip.onclick = function(e_){
 		e_.currentTarget.classList.remove('show');
@@ -556,7 +555,6 @@ window.vConsole = new window.VConsole({
 		if(checkPage !== null){
 			return '/result';
 		}
-		loadAsyncImgs();
 		var page = document.createElement('div');
 		content.appendChild(page);
 		var info = {
@@ -572,12 +570,15 @@ window.vConsole = new window.VConsole({
 				return 'conclusion_'+ this.dimension +'d_'+ (1+~~(Math.random()*5));
 			}
 		}
+		var urls = ["images/result/bg.png", "images/result/content_bg.png", "images/result/"+ info.ticket +".png", "images/result/"+ info.percept +".png", "images/result/"+ info.conclude +".png"];
+		console.log(urls);
+		loadAsyncFromURLs(urls);
 		page.outerHTML = '	<div class="page result" data-path="/result">\
-		<img class="page-bg hide" async data-src="images/result/bg.png" />\
-		<img class="content-bg" async data-src="images/result/content_bg.png" />\
-		<img class="ticket-bg" async data-src="images/result/'+ info.ticket +'.png" />\
-		<img class="percept-bg" async data-src="images/result/'+ info.percept +'.png" />\
-		<img class="conclude-bg" async data-src="images/result/'+ info.conclude +'.png" />\
+		<img class="page-bg hide" async data-src='+ urls[0] +' />\
+		<img class="content-bg" async data-src='+ urls[1] +' />\
+		<img class="ticket-bg" async data-src='+ urls[2] +' />\
+		<img class="percept-bg" async data-src='+ urls[3] +' />\
+		<img class="conclude-bg" async data-src='+ urls[4] +' />\
 		<span class="username">'+ info.name +'</span>\
 		</div>';
 		content.appendChild(page);
