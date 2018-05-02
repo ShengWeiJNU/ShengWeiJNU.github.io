@@ -557,6 +557,7 @@ window.vConsole = new window.VConsole({
 		if(checkPage !== null){
 			return '/result';
 		}
+		loadAsyncImgs();
 		var page = document.createElement('div');
 		content.appendChild(page);
 		var info = {
@@ -580,7 +581,7 @@ window.vConsole = new window.VConsole({
 		<img class="conclude-bg" async data-src="images/result/'+ info.conclude +'.png" />\
 		<span class="username">'+ info.name +'</span>\
 		</div>';
-		loadAsyncImgs();
+		content.appendChild(page);
 		return '/result';
 	}
 })();
