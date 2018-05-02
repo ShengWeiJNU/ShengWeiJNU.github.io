@@ -113,7 +113,7 @@ window.vConsole = new window.VConsole({
 	}else if(path.type === 'question'){
 		sessionStorage.setItem('scores', '[]');
 	}
-	sessionStorage.setItem('path', '/result');/*test*/
+	// sessionStorage.setItem('path', '/result');/*test*/
 	var __configureJSON = null;
 	// var __Data = {
 	// 	'username': null,
@@ -392,6 +392,7 @@ window.vConsole = new window.VConsole({
 
 					var img = new Image();
 					img.onload = function(){
+						console.log(dataurl);
 						console.log(this.src);
 					}
 					var dataurl = canvas.toDataURL();
