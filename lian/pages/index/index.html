@@ -87,6 +87,7 @@
 		<div class="sex-item" data-sex="unknown">
 		</div>
 	</div>
+	<img class="result-img" />
 </div>
 <canvas id="canvas" style="display: none;"></canvas>
 <script type="text/javascript">
@@ -187,6 +188,9 @@ window.vConsole = new window.VConsole({
 			return;
 		}
 		var img = result.querySelector('.page-bg');
+		if(img === null){
+			return;
+		}
 		var username = result.querySelector('.username');
 		var h = img.getBoundingClientRect().height;
 		var fontsize = h * 0.0221;
@@ -384,11 +388,10 @@ window.vConsole = new window.VConsole({
 					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
 					// page.innerHTML = bg.outerHTML;
-					page.innerHTML = '';
-					var img = new Image();
-					img.src = canvas.toDataURL();
 					// <img class="page-bg hide" async data-src="images/result/bg.png" />;
-					page.appendChild(img);
+
+					page.classList.remove('active');
+					document.querySelector('.content .result-img').src = canvas.toDataURL();
 					console.log('toDataURL down');
 				});
 			}
