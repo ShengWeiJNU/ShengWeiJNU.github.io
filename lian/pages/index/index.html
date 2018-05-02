@@ -574,11 +574,11 @@ window.vConsole = new window.VConsole({
 		console.log(urls);
 		loadAsyncFromURLs(urls);
 		page.outerHTML = '	<div class="page result" data-path="/result">\
-		<img class="page-bg hide" async data-src='+ urls[0] +' />\
-		<img class="content-bg" async data-src='+ urls[1] +' />\
-		<img class="ticket-bg" async data-src='+ urls[2] +' />\
-		<img class="percept-bg" async data-src='+ urls[3] +' />\
-		<img class="conclude-bg" async data-src='+ urls[4] +' />\
+		<img class="page-bg hide" src='+ urls[0] +' />\
+		<img class="content-bg" src='+ urls[1] +' />\
+		<img class="ticket-bg" src='+ urls[2] +' />\
+		<img class="percept-bg" src='+ urls[3] +' />\
+		<img class="conclude-bg" src='+ urls[4] +' />\
 		<span class="username">'+ info.name +'</span>\
 		</div>';
 		content.appendChild(page);
