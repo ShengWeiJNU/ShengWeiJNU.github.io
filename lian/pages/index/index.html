@@ -87,7 +87,7 @@
 		<div class="sex-item" data-sex="unknown">
 		</div>
 	</div>
-	<img class="result-img" />
+	<!-- <img class="result-img" /> -->
 </div>
 <canvas id="canvas" style="display: none;"></canvas>
 <script type="text/javascript">
@@ -384,15 +384,16 @@ window.vConsole = new window.VConsole({
 				html2canvas(page, {
 					'width': page.getBoundingClientRect().width,
 					'height': page.getBoundingClientRect().height,
-					'canvas': document.getElementById('canvas'),
-					'foreignObjectRendering': true
+					'canvas': document.getElementById('canvas')
+					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
-					// page.innerHTML = bg.outerHTML;
+					// bg.src = canvas.toDataURL();
+					var src = canvas.toDataURL();
+					page.innerHTML = '<img class="page-bg" src="'+ src +'" />';
 					// <img class="page-bg hide" async data-src="images/result/bg.png" />;
 
-					// page.classList.remove('active');
-					document.querySelector('.content .result-img').src = canvas.toDataURL();
-					console.log('toDataURL down');
+
+					// document.querySelector('.content .result-img').src = canvas.toDataURL();
 				});
 			}
 			setTimeout(function(){
