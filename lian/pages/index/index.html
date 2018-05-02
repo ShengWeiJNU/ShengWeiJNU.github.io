@@ -113,7 +113,7 @@ window.vConsole = new window.VConsole({
 	}else if(path.type === 'question'){
 		sessionStorage.setItem('scores', '[]');
 	}
-	// sessionStorage.setItem('path', '/calculate');/*test*/
+	sessionStorage.setItem('path', '/result');/*test*/
 	var __configureJSON = null;
 	// var __Data = {
 	// 	'username': null,
@@ -385,6 +385,11 @@ window.vConsole = new window.VConsole({
 				}).then(function(canvas) {
 					bg.src = canvas.toDataURL();
 					// page.innerHTML = bg.outerHTML;
+					page.innerHTML = '';
+					// <img class="page-bg hide" async data-src="images/result/bg.png" />;
+					page.appendChild(bg);
+					console.log(page);
+					console.log(bg);
 				});
 			}
 			setTimeout(function(){
