@@ -384,8 +384,8 @@ window.vConsole = new window.VConsole({
 				html2canvas(page, {
 					'width': page.getBoundingClientRect().width,
 					'height': page.getBoundingClientRect().height,
-					'canvas': document.getElementById('canvas')
-					// 'foreignObjectRendering': true
+					'canvas': document.getElementById('canvas'),
+					'foreignObjectRendering': true
 				}).then(function(canvas) {
 					// page.innerHTML = bg.outerHTML;
 					// <img class="page-bg hide" async data-src="images/result/bg.png" />;
