@@ -405,7 +405,7 @@ window.vConsole = new window.VConsole({
 						console.log('生成结果页：');
 						console.log(this.src);
 						bg.src = this.src;
-						page.removeChild(this);
+						// page.removeChild(this);
 					}
 					window.dataurl = canvas.toDataURL('image/jpeg', 1.0);
 					var blob = dataURItoBlob(dataurl);
