@@ -10,7 +10,8 @@
 </head>
 <body>
 <div class="content">
-	<div class="page anime-container" data-path="/">
+	<div class="page default-page active" data-path="/"></div>
+	<div class="page anime-container" data-path="/anime">
 		<div class="anime">
 			<img async data-src="images/anime/anime1.gif" />
 		</div>
@@ -232,6 +233,7 @@ window.vConsole = new window.VConsole({
 	function loadAsyncImgs(){
 		var imgs = document.querySelectorAll('img[async][data-src]');
 		console.log('有%d个图片资源待加载', imgs.length);
+		var loaded = 0;
 		for(var i=imgs.length-1; i>=0; i--){
 			var v = imgs[i];
 			(function(ele_){
@@ -256,6 +258,11 @@ window.vConsole = new window.VConsole({
 					ele_.src = url;
 					ele_.removeAttribute('async');
 					ele_.removeAttribute('data-src');
+
+					loaded ++;
+					if(loaded === imgs.length){
+						navTo('/anime');
+					}
 				}).catch(function(err_){
 					console.error(err_);
 				});			
