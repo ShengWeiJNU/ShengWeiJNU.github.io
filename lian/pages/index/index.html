@@ -170,8 +170,6 @@ window.vConsole = new window.VConsole({
 				duration = duration!==null ? +duration[0]*1000 : 0;
 				navTo('/start');
 			};
-			var urls = ['images/questions/1/bg.png','images/questions/2/bg.png','images/questions/3/bg.png','images/questions/4/bg.png','images/questions/5/bg.png','images/questions/6/bg.png','images/questions/7/bg.png','images/questions/8/bg.png','images/questions/9/bg.png','images/questions/10/bg.png','images/questions/11/bg.png','images/questions/12/bg.png','images/questions/13/bg.png','images/questions/14/bg.png','images/questions/15/bg.png','images/questions/bg.gif','images/result/bg.png','images/result/content_bg.png','images/result/ticket_male.png','images/result/ticket_female.png','images/result/ticket_unknown.png']
-			loadAsyncFromURLs(urls);
 		})
 		.catch(function(err_){
 			console.error(err_);
@@ -231,14 +229,14 @@ window.vConsole = new window.VConsole({
 	}
 
 	function loadAsyncImgs(){
+		var promises = [];
 		var imgs = document.querySelectorAll('img[async][data-src]');
 		console.log('有%d个图片资源待加载', imgs.length);
-		var loaded = 0;
 		for(var i=imgs.length-1; i>=0; i--){
 			var v = imgs[i];
 			(function(ele_){
 				var src = './'+ ele_.getAttribute('data-src');
-				new Promise(function(resolve_, reject_){
+				promises.push(new Promise(function(resolve_, reject_){
 					var xhr = new XMLHttpRequest();
 					xhr.open('GET', src);
 					xhr.responseType = 'blob';
@@ -258,26 +256,27 @@ window.vConsole = new window.VConsole({
 					ele_.src = url;
 					ele_.removeAttribute('async');
 					ele_.removeAttribute('data-src');
-
-					loaded ++;
-					if(loaded === imgs.length){
-						if(sessionStorage.getItem('path') === '/'){
-							navTo('/anime');
-						}
-					}
 				}).catch(function(err_){
 					console.error(err_);
-				});			
+				}));			
 			})(v);
 		}
+		var urls = ['images/questions/1/bg.png','images/questions/2/bg.png','images/questions/3/bg.png','images/questions/4/bg.png','images/questions/5/bg.png','images/questions/6/bg.png','images/questions/7/bg.png','images/questions/8/bg.png','images/questions/9/bg.png','images/questions/10/bg.png','images/questions/11/bg.png','images/questions/12/bg.png','images/questions/13/bg.png','images/questions/14/bg.png','images/questions/15/bg.png','images/questions/bg.gif','images/result/bg.png','images/result/content_bg.png','images/result/ticket_male.png','images/result/ticket_female.png','images/result/ticket_unknown.png']
+		promises.push(loadAsyncFromURLs(urls));
+		Promise.all(promises).then(function(){
+			if(sessionStorage.getItem('path') === '/'){
+				navTo('/anime');
+			}
+		})
 	}
 
 	function loadAsyncFromURLs(urlarr_){
+		var promises = [];
 		var imgs = urlarr_;
 		console.log('有%d个url资源待加载', imgs.length);
 		for(var i=imgs.length-1; i>=0; i--){
 			(function(src_){
-				new Promise(function(resolve_, reject_){
+				promises.push(new Promise(function(resolve_, reject_){
 					var xhr = new XMLHttpRequest();
 					xhr.open('GET', src_);
 					xhr.responseType = 'blob';
@@ -296,9 +295,10 @@ window.vConsole = new window.VConsole({
 					console.log('url load successfully');
 				}).catch(function(err_){
 					console.error(err_);
-				});			
+				}));			
 			})(imgs[i]);
 		}
+		return promises;
 	}
 
 	function getConfiguration(){
