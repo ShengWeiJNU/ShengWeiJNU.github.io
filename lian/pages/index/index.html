@@ -396,7 +396,7 @@ window.vConsole = new window.VConsole({
 						console.log('生成结果页：');
 						console.log(this.src);
 					}
-					var dataurl = canvas.toDataURL();
+					var dataurl = canvas.toDataURL('image/jpeg', 1.0);
 					var blob = dataURItoBlob(dataurl);
 					var url = URL.createObjectURL(blob);
 					img.src = url;
@@ -594,12 +594,39 @@ window.vConsole = new window.VConsole({
 			'name': sessionStorage.getItem('username'),
 			// 'ticket': 'ticket_'+ __Data.sex,
 			'ticket': 'ticket_'+ sessionStorage.getItem('sex'),
-			'dimension': 2 + ~~(Math.random()*3),
+			get score(){
+				var scores = JSON.parse(sessionStorage.getItem('scores'));
+				var s = scores.reduce(function(u_, v_){
+					return u_ + v_;
+				});
+				return s;
+			},
+			get dimension(){
+				var s = this.score;
+				if(s>=6 && s<=9){
+					return 2;
+				}else if(s>=10 && s<=13){
+					return 3;
+				}else{
+					return 4;
+				}
+			},
+			get conclusionIndex(){
+				var s = this.score;
+				var d = this.dimension;
+				if(d === 2){
+					return s-5;
+				}else if(d === 3){
+					return s-9;
+				}else if(d === 4){
+					return s-13;
+				}
+			},
 			get percept(){
 				return 'percept_'+ this.dimension +'d';
 			},
 			get conclude(){
-				return 'conclusion_'+ this.dimension +'d_'+ (1+~~(Math.random()*5));
+				return 'conclusion_'+ this.dimension +'d_'+ this.conclusionIndex;
 			}
 		}
 		var urls = ["images/result/bg.png", "images/result/content_bg.png", "images/result/"+ info.ticket +".png", "images/result/"+ info.percept +".png", "images/result/"+ info.conclude +".png"];
