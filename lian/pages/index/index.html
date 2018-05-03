@@ -261,7 +261,9 @@ window.vConsole = new window.VConsole({
 
 					loaded ++;
 					if(loaded === imgs.length){
-						navTo('/anime');
+						if(sessionStorage.getItem('path') === '/'){
+							navTo('/anime');
+						}
 					}
 				}).catch(function(err_){
 					console.error(err_);
