@@ -391,15 +391,15 @@ window.vConsole = new window.VConsole({
 
 
 					var img = new Image();
+					page.appendChild(img);
 					img.onload = function(){
-						console.log(dataurl);
+						console.log('生成结果页：');
 						console.log(this.src);
 					}
 					var dataurl = canvas.toDataURL();
 					var blob = dataURItoBlob(dataurl);
 					var url = URL.createObjectURL(blob);
 					img.src = url;
-					page.appendChild(img);
 				});
 			}
 			setTimeout(function(){
@@ -500,7 +500,8 @@ window.vConsole = new window.VConsole({
 		v_.addEventListener('click', function(e_){
 			var sex = e_.currentTarget.getAttribute('data-sex');
 			sessionStorage.setItem('sex', sex);
-			navTo('/calculate');
+			// navTo('/calculate');/*test*/
+			navTo('/result');
 		});
 	});
 
@@ -610,7 +611,7 @@ window.vConsole = new window.VConsole({
 		<img class="ticket-bg" src='+ urls[2] +' />\
 		<img class="percept-bg" src='+ urls[3] +' />\
 		<img class="conclude-bg" src='+ urls[4] +' />\
-		<span class="username">'+ info.name +'</span>\
+		<span class="username">旅行者'+ info.name +'</span>\
 		</div>';
 		return '/result';
 	}

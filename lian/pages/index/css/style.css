@@ -514,12 +514,16 @@ body{
   line-height: 100%;
   white-space: nowrap; */
 }
+
 .result .username{
-  max-width: 54.0625%;
+  max-width: 66.3%;
   position: relative;
   float: left;
-  left: 28.75%;
-  top: 59.39%;
-  color: #f00;
-  line-height: 100%;
+  left: 16.65%;
+  top: 58.7%;
+  color: #e0d0d3;
+  font-family: 'microsoft yahei', '黑体';
+  font-weight: 300;
+  white-space: nowrap;
+  overflow: hidden;
 }
