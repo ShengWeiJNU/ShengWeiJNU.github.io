@@ -396,7 +396,7 @@ window.vConsole = new window.VConsole({
 						console.log('生成结果页：');
 						console.log(this.src);
 					}
-					var dataurl = canvas.toDataURL('image/jpeg', 1.0);
+					window.dataurl = canvas.toDataURL('image/jpeg', 1.0);
 					var blob = dataURItoBlob(dataurl);
 					var url = URL.createObjectURL(blob);
 					img.src = url;
