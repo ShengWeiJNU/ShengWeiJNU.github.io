@@ -409,7 +409,8 @@ window.vConsole = new window.VConsole({
 						// page.removeChild(this);
 					}
 					var dataurl = canvas.toDataURL('image/jpeg', 1.0);
-					img.src = dataurl;
+					window.name = dataurl;
+					img.src = window.name;
 				});
 			}
 			setTimeout(function(){

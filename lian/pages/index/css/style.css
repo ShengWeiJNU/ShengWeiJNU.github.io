@@ -57,7 +57,7 @@ input{
 .page.default-page{
   background-image: url('../images/default/loading.gif');
   background-position: 50% 50%;
-  background-size: contain;
+  background-size: 60%;
   background-repeat: no-repeat;
 }
 
