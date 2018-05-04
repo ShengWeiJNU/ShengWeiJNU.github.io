@@ -392,6 +392,7 @@ window.vConsole = new window.VConsole({
 				html2canvas(page, {
 					'width': page.getBoundingClientRect().width,
 					'height': page.getBoundingClientRect().height,
+					'useCORS': true,
 					'canvas': document.getElementById('canvas')
 					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
