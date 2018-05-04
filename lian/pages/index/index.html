@@ -401,6 +401,7 @@ window.vConsole = new window.VConsole({
 
 					var img = new Image();
 					page.appendChild(img);
+					img.setAttribute('crossorigin', "anonymous");
 					img.onload = function(){
 						console.log('生成结果页：');
 						console.log(this.src);
