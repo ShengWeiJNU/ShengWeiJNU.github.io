@@ -6,138 +6,62 @@
 	<title>问卷</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 	<script src="../../js/vconsole.min.js"></script>
+	<script src="../../js/html2canvas.min.js"></script>
 </head>
 <body>
 <div class="content">
-	<div class="page anime-container" data-path="/">
-		<div class="anime">
-			<img async data-src="images/anime/anime1.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime2.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime3.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime4.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime5.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime6.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime7.gif" />
-			<div class="trigger-container">
-				<div id="trigger-zone">
-					<div></div>
-					<div></div>
-				</div>
-			</div>
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime8.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime9.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime10.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime11.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime12.gif" />
-		</div>
-		<div class="anime">
-			<img async data-src="images/anime/anime13.gif" />
-		</div>
-	</div>
-	<div class="page startTest" data-path="/start">
-		<div class="page-bg">
-			<img async data-src="images/start/bg.gif" />
-		</div>
-		<div class="para">
-			<img class="para-img" async data-src="images/start/para.png" />
-		</div>
-		<div class="input-area">
-			<input id="username" type="text" maxlength="13" placeholder="签上您的名字接收信件">
-		</div>
-		<div class="button-area">
-			<input id="enter" type="button" maxlength="13" placeholder="签上您的名字接收信件">
-			<img  async data-src="images/start/tip.png" />
-		</div>
-		<div class="tooltip"></div>
+	<div class="page result" data-path="/result">
+		<img class="page-bg hide" async data-src="images/result/bg.png" />
+		<img class="content-bg" async data-src="images/result/content_bg.png" />
+		<img class="ticket-bg" async data-src="images/result/ticket_unknown.png" />
+		<img class="percept-bg" async data-src="images/result/percept_2d.png" />
+		<img class="conclude-bg" async data-src="images/result/conclusion_2d_1.png" />
+		<span class="username">旅行者bibibobo</span>
 	</div>
 </div>
+<canvas id="canvas" style="display: none !important;"></canvas>
 <script type="text/javascript">
-// window.vConsole = new window.VConsole({
-//   defaultPlugins: ['system', 'network', 'element', 'storage'], // 可以在此设定要默认加载的面板
-//   maxLogNumber: 1000,
-//   // disableLogScrolling: true,
-//   onReady: function() {
-//     console.log('vConsole is ready.');
-//   },
-//   onClearLog: function() {
-//     console.log('on clearLog');
-//   }
-// });
+window.vConsole = new window.VConsole({
+  defaultPlugins: ['system', 'network', 'element', 'storage'], // 可以在此设定要默认加载的面板
+  maxLogNumber: 1000,
+  // disableLogScrolling: true,
+  onReady: function() {
+    console.log('vConsole is ready.');
+  },
+  onClearLog: function() {
+    console.log('on clearLog');
+  }
+});
 
 (function(){
-	// init page
-	var __configureJSON = null;
-	var __Data = {
-		'username': null,
-		'scores': []
-	};
-	var genQuesPageInd;
-
 	window.onload = function(e_){
 		setBodySize();
 		loadImgs();
-		getConfiguration()
-		.then(function(res_){
-			window.name = window.name==='' ? '/' : window.name;
-			navTo(window.name);
-			document.querySelector('#trigger-zone').onclick = function(e_){
-				var body = document.body;
-				var content = body.querySelector('.content');
-				var duration = getComputedStyle(body).transitionDuration.match(/(\d*\.?\d*)/g);
-				duration = duration!==null ? +duration[0]*1000 : 0;
-				navTo('/start');
-			};
-			genQuesPageInd = (function(){
-				var existQuesList = {length: 0};
-				var maxLen = __configureJSON['ques'].length;
-				return function(){
-					var ind;
-					if(existQuesList.length >= maxLen){
-						return null;
-					}
-					while(1){
-						ind = ~~(Math.random()*maxLen) + 1;
-						if(existQuesList[ind] !== undefined){
-							continue;
-						}else{
-							existQuesList[ind] = ind;
-							existQuesList.length ++;
-							break;
-						}
-					}
-					console.log(ind);
-					return ind;
-				}
-			})();
-		})
-		.catch(function(err_){
-			console.error(err_);
-		});
+		navTo('/result');
 	}
 	window.onresize = function(e_){
 		setBodySize();
+	}
+	window.onclick = function(e_){
+		var page = document.querySelector('.page.result.active');
+		if(!page){
+			return;
+		}
+		html2canvas(page, {
+			'width': page.getBoundingClientRect().width,
+			'height': page.getBoundingClientRect().height,
+			'canvas': document.getElementById('canvas')
+			// 'foreignObjectRendering': true
+		}).then(function(canvas) {
+			var img = new Image();
+			img.onload = function(){
+				page.innerHTML = img.outerHTML;
+				console.log('生成结果页：');
+				console.log(this.src);
+			}
+			var dataurl = canvas.toDataURL('image/jpeg', 1.0);
+			img.src = dataurl;
+		});
 	}
 
 
@@ -205,25 +129,6 @@
 		}
 	}
 
-	function getConfiguration(){
-		return new Promise(function(resolve_, reject_){
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', './config.json');
-			xhr.responseType = 'json';
-			xhr.onreadystatechange = function(){
-				if(xhr.readyState !== 4){
-					return;
-				}else if(xhr.readyState===4 && xhr.status===200){
-					__configureJSON = xhr.response;
-					resolve_(xhr.response);
-				}else{
-					reject_(xhr.response);
-				}
-			}
-			xhr.send();
-		});
-	}
-
 	function navTo(path_){
 		var body = document.body;
 		var curPage = body.querySelector('.page.active');
@@ -260,80 +165,6 @@
 				}, runInDur);
 			}, 150);
 		}, bodyDur);
-	}
-
-
-	// start page
-	var btn = document.getElementById('enter');
-	var inp = document.getElementById('username');
-	var tooltip = document.querySelector('.tooltip');
-	inp.onfocus = function(e_){
-		e_.currentTarget.setAttribute('data-focus', '');
-	}
-	inp.onblur = function(e_){
-		e_.currentTarget.removeAttribute('data-focus');
-	}
-	btn.onclick = function(e_){
-		var val = inp.value;
-		var name = val.trim();
-		if(name.length === 0){
-			tooltip.classList.add('show');
-		}else{
-			__Data.username = val;
-			var ind = genQuesPageInd();
-			var path = createQuestionPage(ind);
-			navTo(path);
-		}
-	};
-	tooltip.onclick = function(e_){
-		e_.currentTarget.classList.remove('show');
-	}
-
-	function choose(e_){
-		var val = +e_.currentTarget.getAttribute('data-value');
-		__Data.scores.push(val);
-		// console.log(__Data.scores);
-		if(__Data.scores.length < 6){
-			var ind = genQuesPageInd();
-			var path = createQuestionPage(ind);
-			navTo(path);
-		}else{
-			var score = __Data.scores.reduce(function(v_, u_){
-				return v_ + u_;
-			});
-			location.href = '/pages/result/index.html?username='+ encodeURIComponent(__Data.username) +'&score='+ score;
-			__Data = null;
-		}
-	}
-
-	// question option choose
-	var options = document.querySelectorAll('.question>div');
-	options.forEach(function(v_, i_, arr_){
-		v_.addEventListener('click', choose);
-	});
-
-	function createQuestionPage(index_){
-		var content = document.querySelector('.content');
-		var checkPage = content.querySelector('.page[data-path="/question/'+ index_ +'"]');
-		if(checkPage !== null){
-			return '/question/'+ index_;
-		}
-		var page = document.createElement('div');
-		content.appendChild(page);
-		var infoObj = __configureJSON['ques'][index_-1];
-		var valArr = infoObj['level'];
-		var posObj = infoObj['loc'];
-		page.outerHTML = '<div class="page question" style="background-image: url(\'images/questions/'+ index_ +'/bg.png\'), url(\'images/questions/bg.gif\');" data-path="/question/'+ index_ +'">\
-		<div class="optionA" style="width:'+ posObj['A'][0] +'%; height:'+ posObj['A'][1] +'%; left:'+ posObj['A'][2] +'%; top:'+ posObj['A'][3] +'%" data-value="'+ valArr[0] +'"></div>\
-		<div class="optionB" style="width:'+ posObj['B'][0] +'%; height:'+ posObj['B'][1] +'%; left:'+ posObj['B'][2] +'%; top:'+ posObj['B'][3] +'%" data-value="'+ valArr[1] +'"></div>\
-		<div class="optionC" style="width:'+ posObj['C'][0] +'%; height:'+ posObj['C'][1] +'%; left:'+ posObj['C'][2] +'%; top:'+ posObj['C'][3] +'%" data-value="'+ valArr[2] +'"></div></div>';
-		// Because we has set outerHTML of the new page element, so we need to reget the page element.
-		page = content.querySelector('.page[data-path="/question/'+ index_ +'"]');
-		var options = page.children;
-		for(var i=options.length-1; i>=0; i--){
-			options[i].addEventListener('click', choose);
-		}
-		return '/question/'+ index_;
 	}
 })();
 </script>
