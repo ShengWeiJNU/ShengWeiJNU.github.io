@@ -11,11 +11,11 @@
 <body>
 <div class="content">
 	<div class="page result active" data-path="/result">
-		<img class="page-bg hide" async data-src="images/result/bg.png" />
-		<img class="content-bg" async data-src="images/result/content_bg.png" />
-		<img class="ticket-bg" async data-src="images/result/ticket_unknown.png" />
-		<img class="percept-bg" async data-src="images/result/percept_2d.png" />
-		<img class="conclude-bg" async data-src="images/result/conclusion_2d_1.png" />
+		<img class="page-bg hide" async src="images/result/bg.png" />
+		<img class="content-bg" async src="images/result/content_bg.png" />
+		<img class="ticket-bg" async src="images/result/ticket_unknown.png" />
+		<img class="percept-bg" async src="images/result/percept_2d.png" />
+		<img class="conclude-bg" async src="images/result/conclusion_2d_1.png" />
 		<span class="username">旅行者bibibobo</span>
 	</div>
 </div>
@@ -36,7 +36,7 @@
 (function(){
 	window.onload = function(e_){
 		setBodySize();
-		loadImgs();
+		// loadImgs();
 		// navTo('/result');
 	}
 	window.onresize = function(e_){
@@ -96,38 +96,38 @@
 		body.style.height = nh + 'px';
 	}
 
-	function loadImgs(){
-		var imgs = document.querySelectorAll('img[async]');
-		for(var i=imgs.length-1; i>=0; i--){
-			var v = imgs[i];
-			(function(ele_){
-				var src = './'+ ele_.getAttribute('data-src');
-				new Promise(function(resolve_, reject_){
-					var xhr = new XMLHttpRequest();
-					xhr.open('GET', src);
-					xhr.responseType = 'blob';
-					xhr.onreadystatechange = function(){
-						if(xhr.readyState !== 4){
-							return;
-						}else if(xhr.readyState===4 && xhr.status===200){
-							resolve_(xhr.response);
-						}
-					}
-					xhr.onerror = function(err_){
-						reject_(err_);
-					}
-					xhr.send();
-				}).then(function(blob_){
-					var url = URL.createObjectURL(blob_);
-					ele_.src = url;
-					ele_.removeAttribute('async');
-					ele_.removeAttribute('data-src');
-				}).catch(function(err_){
-					console.error(err_);
-				});			
-			})(v);
-		}
-	}
+	// function loadImgs(){
+	// 	var imgs = document.querySelectorAll('img[async]');
+	// 	for(var i=imgs.length-1; i>=0; i--){
+	// 		var v = imgs[i];
+	// 		(function(ele_){
+	// 			var src = './'+ ele_.getAttribute('data-src');
+	// 			new Promise(function(resolve_, reject_){
+	// 				var xhr = new XMLHttpRequest();
+	// 				xhr.open('GET', src);
+	// 				xhr.responseType = 'blob';
+	// 				xhr.onreadystatechange = function(){
+	// 					if(xhr.readyState !== 4){
+	// 						return;
+	// 					}else if(xhr.readyState===4 && xhr.status===200){
+	// 						resolve_(xhr.response);
+	// 					}
+	// 				}
+	// 				xhr.onerror = function(err_){
+	// 					reject_(err_);
+	// 				}
+	// 				xhr.send();
+	// 			}).then(function(blob_){
+	// 				var url = URL.createObjectURL(blob_);
+	// 				ele_.src = url;
+	// 				ele_.removeAttribute('async');
+	// 				ele_.removeAttribute('data-src');
+	// 			}).catch(function(err_){
+	// 				console.error(err_);
+	// 			});			
+	// 		})(v);
+	// 	}
+	// }
 
 	// function navTo(path_){
 	// 	var body = document.body;
