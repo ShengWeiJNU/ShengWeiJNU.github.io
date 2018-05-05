@@ -125,7 +125,6 @@ window.vConsole = new window.VConsole({
 
 	window.onload = function(e_){
 		setBodySize();
-		loadAsyncImgs();
 		getConfiguration()
 		.then(function(res_){
 			genQuesPageInd = (function(){
@@ -160,8 +159,8 @@ window.vConsole = new window.VConsole({
 				return f;
 			})();
 			var path = sessionStorage.getItem('path');
-			path = path===null ? '/' : path;
-			sessionStorage.setItem('path', path);
+			path = path==null ? '/' : path;
+			// sessionStorage.setItem('path', path);
 			navTo(path);
 			document.querySelector('#trigger-zone').onclick = function(e_){
 				var body = document.body;
@@ -170,6 +169,7 @@ window.vConsole = new window.VConsole({
 				duration = duration!==null ? +duration[0]*1000 : 0;
 				navTo('/start');
 			};
+			loadAsyncImgs();
 		})
 		.catch(function(err_){
 			console.error(err_);
@@ -365,10 +365,11 @@ window.vConsole = new window.VConsole({
 					genQuesPageInd.add(ind);
 					navTo(createQuestionPage(ind));
 				}
-			}else{
-				sessionStorage.setItem('path', '/anime');
-				navTo('/anime');
 			}
+			// else{
+			// 	sessionStorage.setItem('path', '/');
+			// 	navTo('/');
+			// }
 			return;
 		}
 		if(curPage === null){
@@ -405,7 +406,7 @@ window.vConsole = new window.VConsole({
 					img.setAttribute('crossorigin', "anonymous");
 					img.onload = function(){
 						console.log('生成结果页：');
-						console.log(this.src);
+						// console.log(this.src);
 						bg.src = this.src;
 						// page.removeChild(this);
 					}
