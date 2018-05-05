@@ -387,7 +387,7 @@ body{
   }
 }
 .question.run-out{
-  animation: ques-run-out 0.75s ease-out 1;
+  animation: ques-run-out 0.75s ease-in-out 1;
 }
 @keyframes ques-run-out{
   from{
@@ -396,7 +396,7 @@ body{
   }
   to{
     transform-origin: 0 100%;
-    transform: rotate3d(0,1,0,-220deg);
+    transform: rotate3d(0,1,0,-150deg);
   }
 }
 
