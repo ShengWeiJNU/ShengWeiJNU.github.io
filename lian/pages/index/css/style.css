@@ -53,6 +53,19 @@ input{
   display: none !important;
   position: absolute;
 }
+#vue{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	object-fit: contain;
+	object-position: 50% 50%;
+  z-index: 100;
+}
+#vue.hide{
+  display: none;
+}
 
 .page.default-page{
   background-image: url('../images/default/loading.gif');
