@@ -123,83 +123,78 @@
 
 
 (function(){
-	// init page
-	var path = validatePath(sessionStorage.getItem('path'));
-	if(!path.legal || path.type==='result' || path.type==='default'){
-		sessionStorage.setItem('path', '/');
-		sessionStorage.setItem('username', '佚名');
-		sessionStorage.setItem('sex', 'unknown');
-		// sessionStorage.setItem('scores', '[]');
-		sessionStorage.setItem('scores', '[6]');/*test*/
-	}else if(path.type === 'question'){
-		sessionStorage.setItem('scores', '[]');
-	}
+	// // init page
+	// var path = validatePath(sessionStorage.getItem('path'));
+	// if(!path.legal || path.type==='result' || path.type==='default'){
+	// 	sessionStorage.setItem('path', '/');
+	// 	sessionStorage.setItem('username', '佚名');
+	// 	sessionStorage.setItem('sex', 'unknown');
+	// 	// sessionStorage.setItem('scores', '[]');
+	// 	sessionStorage.setItem('scores', '[6]');/*test*/
+	// }else if(path.type === 'question'){
+	// 	sessionStorage.setItem('scores', '[]');
+	// }
 	navTo('/result');/*test*/
-	var __configureJSON = null;
-	// var __Data = {
-	// 	'username': null,
-	// 	'sex': 'male',
-	// 	'scores': []
-	// };
-	var genQuesPageInd;
+	// var __configureJSON = null;
+	// var genQuesPageInd;
 
 	// window.onload = function(e_){
 		setBodySize();
-		getConfiguration()
-		.then(function(res_){
-			genQuesPageInd = (function(){
-				var existQuesList = {length: 0};
-				var maxLen = __configureJSON['ques'].length;
-				function f(){
-					var ind;
-					if(existQuesList.length >= maxLen){
-						return null;
-					}
-					while(1){
-						ind = ~~(Math.random()*maxLen) + 1;
-						if(existQuesList[ind] !== undefined){
-							continue;
-						}else{
-							existQuesList[ind] = ind;
-							existQuesList.length ++;
-							break;
-						}
-					}
-					// console.log(ind);
-					return ind;
-				}
-				f.add = function(ind_){
-					if(existQuesList.length<maxLen && existQuesList[ind_]===undefined){
-						existQuesList[ind_] = ind_;
-						return ind_;
-					}else{
-						return null;
-					}
-				}
-				return f;
-			})();
+		// getConfiguration()
+		// .then(function(res_){
+		// 	genQuesPageInd = (function(){
+		// 		var existQuesList = {length: 0};
+		// 		var maxLen = __configureJSON['ques'].length;
+		// 		function f(){
+		// 			var ind;
+		// 			if(existQuesList.length >= maxLen){
+		// 				return null;
+		// 			}
+		// 			while(1){
+		// 				ind = ~~(Math.random()*maxLen) + 1;
+		// 				if(existQuesList[ind] !== undefined){
+		// 					continue;
+		// 				}else{
+		// 					existQuesList[ind] = ind;
+		// 					existQuesList.length ++;
+		// 					break;
+		// 				}
+		// 			}
+		// 			// console.log(ind);
+		// 			return ind;
+		// 		}
+		// 		f.add = function(ind_){
+		// 			if(existQuesList.length<maxLen && existQuesList[ind_]===undefined){
+		// 				existQuesList[ind_] = ind_;
+		// 				return ind_;
+		// 			}else{
+		// 				return null;
+		// 			}
+		// 		}
+		// 		return f;
+		// 	})();
 
-			var path = sessionStorage.getItem('path');
-			if(path!=null && path!='/'){
-				navTo(path);
-			}
-			document.querySelector('#trigger-zone').onclick = function(e_){
-				var body = document.body;
-				var content = body.querySelector('.content');
-				var duration = getComputedStyle(body).transitionDuration.match(/(\d*\.?\d*)/g);
-				duration = duration!==null ? +duration[0]*1000 : 0;
-				navTo('/start');
-			};
-			loadAsyncImgs();
-		})
-		.catch(function(err_){
-			console.error(err_);
-		});
+		// 	var path = sessionStorage.getItem('path');
+		// 	if(path!=null && path!='/'){
+		// 		navTo(path);
+		// 	}
+		// 	document.querySelector('#trigger-zone').onclick = function(e_){
+		// 		var body = document.body;
+		// 		var content = body.querySelector('.content');
+		// 		var duration = getComputedStyle(body).transitionDuration.match(/(\d*\.?\d*)/g);
+		// 		duration = duration!==null ? +duration[0]*1000 : 0;
+		// 		navTo('/start');
+		// 	};
+		// 	loadAsyncImgs();
+		// })
+		// .catch(function(err_){
+		// 	console.error(err_);
+		// });
 	// }
-	window.onresize = function(e_){
-		setBodySize();
-		setTextSize();
-	}
+	// window.onresize = function(e_){
+	// 	setBodySize();
+	// 	setTextSize();
+	// }
 
 	function setTextSize(){
 		var result = document.querySelector('.page.result.active');
@@ -249,127 +244,127 @@
 		body.style.height = nh + 'px';
 	}
 
-	function loadAsyncImgs(){
-		var promises = [];
-		var imgs = document.querySelectorAll('img[async][data-src]');
-		console.log('有%d个图片资源待加载', imgs.length);
-		for(var i=imgs.length-1; i>=0; i--){
-			var v = imgs[i];
-			(function(ele_){
-				var src = './'+ ele_.getAttribute('data-src');
-				promises.push(new Promise(function(resolve_, reject_){
-					var xhr = new XMLHttpRequest();
-					xhr.open('GET', src);
-					xhr.responseType = 'blob';
-					xhr.onreadystatechange = function(){
-						if(xhr.readyState !== 4){
-							return;
-						}else if(xhr.readyState===4 && xhr.status===200){
-							resolve_(xhr.response);
-						}
-					}
-					xhr.onerror = function(err_){
-						reject_(err_);
-					}
-					xhr.send();
-				}).then(function(blob_){
-					var url = URL.createObjectURL(blob_);
-					ele_.src = url;
-					ele_.removeAttribute('async');
-					ele_.removeAttribute('data-src');
-				}).catch(function(err_){
-					console.error(err_);
-				}));			
-			})(v);
-		}
-		var urls = ['images/questions/1/bg.png','images/questions/2/bg.png','images/questions/3/bg.png','images/questions/4/bg.png','images/questions/5/bg.png','images/questions/6/bg.png','images/questions/7/bg.png','images/questions/8/bg.png','images/questions/9/bg.png','images/questions/10/bg.png','images/questions/11/bg.png','images/questions/12/bg.png','images/questions/13/bg.png','images/questions/14/bg.png','images/questions/15/bg.png','images/questions/bg.gif','images/result/bg.png','images/result/content_bg.png','images/result/ticket_male.png','images/result/ticket_female.png','images/result/ticket_unknown.png']
-		promises.push(loadAsyncFromURLs(urls));
-		Promise.all(promises).then(function(){
-			if(sessionStorage.getItem('path') === '/'){
-				navTo('/anime');
-			}
-		})
-	}
+	// function loadAsyncImgs(){
+	// 	var promises = [];
+	// 	var imgs = document.querySelectorAll('img[async][data-src]');
+	// 	console.log('有%d个图片资源待加载', imgs.length);
+	// 	for(var i=imgs.length-1; i>=0; i--){
+	// 		var v = imgs[i];
+	// 		(function(ele_){
+	// 			var src = './'+ ele_.getAttribute('data-src');
+	// 			promises.push(new Promise(function(resolve_, reject_){
+	// 				var xhr = new XMLHttpRequest();
+	// 				xhr.open('GET', src);
+	// 				xhr.responseType = 'blob';
+	// 				xhr.onreadystatechange = function(){
+	// 					if(xhr.readyState !== 4){
+	// 						return;
+	// 					}else if(xhr.readyState===4 && xhr.status===200){
+	// 						resolve_(xhr.response);
+	// 					}
+	// 				}
+	// 				xhr.onerror = function(err_){
+	// 					reject_(err_);
+	// 				}
+	// 				xhr.send();
+	// 			}).then(function(blob_){
+	// 				var url = URL.createObjectURL(blob_);
+	// 				ele_.src = url;
+	// 				ele_.removeAttribute('async');
+	// 				ele_.removeAttribute('data-src');
+	// 			}).catch(function(err_){
+	// 				console.error(err_);
+	// 			}));			
+	// 		})(v);
+	// 	}
+	// 	var urls = ['images/questions/1/bg.png','images/questions/2/bg.png','images/questions/3/bg.png','images/questions/4/bg.png','images/questions/5/bg.png','images/questions/6/bg.png','images/questions/7/bg.png','images/questions/8/bg.png','images/questions/9/bg.png','images/questions/10/bg.png','images/questions/11/bg.png','images/questions/12/bg.png','images/questions/13/bg.png','images/questions/14/bg.png','images/questions/15/bg.png','images/questions/bg.gif','images/result/bg.png','images/result/content_bg.png','images/result/ticket_male.png','images/result/ticket_female.png','images/result/ticket_unknown.png']
+	// 	promises.push(loadAsyncFromURLs(urls));
+	// 	Promise.all(promises).then(function(){
+	// 		if(sessionStorage.getItem('path') === '/'){
+	// 			navTo('/anime');
+	// 		}
+	// 	})
+	// }
 
-	function loadAsyncFromURLs(urlarr_){
-		var promises = [];
-		var imgs = urlarr_;
-		console.log('有%d个url资源待加载', imgs.length);
-		for(var i=imgs.length-1; i>=0; i--){
-			(function(src_){
-				promises.push(new Promise(function(resolve_, reject_){
-					var xhr = new XMLHttpRequest();
-					xhr.open('GET', src_);
-					xhr.responseType = 'blob';
-					xhr.onreadystatechange = function(){
-						if(xhr.readyState !== 4){
-							return;
-						}else if(xhr.readyState===4 && xhr.status===200){
-							resolve_(xhr.response);
-						}
-					}
-					xhr.onerror = function(err_){
-						reject_(err_);
-					}
-					xhr.send();
-				}).then(function(blob_){
-					console.log('url load successfully');
-				}).catch(function(err_){
-					console.error(err_);
-				}));			
-			})(imgs[i]);
-		}
-		return promises;
-	}
+	// function loadAsyncFromURLs(urlarr_){
+	// 	var promises = [];
+	// 	var imgs = urlarr_;
+	// 	console.log('有%d个url资源待加载', imgs.length);
+	// 	for(var i=imgs.length-1; i>=0; i--){
+	// 		(function(src_){
+	// 			promises.push(new Promise(function(resolve_, reject_){
+	// 				var xhr = new XMLHttpRequest();
+	// 				xhr.open('GET', src_);
+	// 				xhr.responseType = 'blob';
+	// 				xhr.onreadystatechange = function(){
+	// 					if(xhr.readyState !== 4){
+	// 						return;
+	// 					}else if(xhr.readyState===4 && xhr.status===200){
+	// 						resolve_(xhr.response);
+	// 					}
+	// 				}
+	// 				xhr.onerror = function(err_){
+	// 					reject_(err_);
+	// 				}
+	// 				xhr.send();
+	// 			}).then(function(blob_){
+	// 				console.log('url load successfully');
+	// 			}).catch(function(err_){
+	// 				console.error(err_);
+	// 			}));			
+	// 		})(imgs[i]);
+	// 	}
+	// 	return promises;
+	// }
 
-	function getConfiguration(){
-		return new Promise(function(resolve_, reject_){
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', './config.json');
-			xhr.responseType = 'json';
-			xhr.onreadystatechange = function(){
-				if(xhr.readyState !== 4){
-					return;
-				}else if(xhr.readyState===4 && xhr.status===200){
-					__configureJSON = xhr.response;
-					resolve_(xhr.response);
-				}else{
-					reject_(xhr.response);
-				}
-			}
-			xhr.send();
-		});
-	}
+	// function getConfiguration(){
+	// 	return new Promise(function(resolve_, reject_){
+	// 		var xhr = new XMLHttpRequest();
+	// 		xhr.open('GET', './config.json');
+	// 		xhr.responseType = 'json';
+	// 		xhr.onreadystatechange = function(){
+	// 			if(xhr.readyState !== 4){
+	// 				return;
+	// 			}else if(xhr.readyState===4 && xhr.status===200){
+	// 				__configureJSON = xhr.response;
+	// 				resolve_(xhr.response);
+	// 			}else{
+	// 				reject_(xhr.response);
+	// 			}
+	// 		}
+	// 		xhr.send();
+	// 	});
+	// }
 
-	function validatePath(path_){
-		var path = String(path_).trim();
-		if(path === '/'){
-			return {
-				legal: true,
-				path: path,
-				type: 'default'
-			}
-		}
-		if(path==='/anime' || path==='/calculate' || path==='/result' || path==='/start' || path==='/sex'){
-			return {
-				legal: true,
-				path: path,
-				type: path.slice(1)
-			}
-		}
-		if(path.match(/\/question\/(\d{1,})$/) !== null){
-			return {
-				legal: true,
-				path: path,
-				type: 'question'
-			}
-		}
-		return {
-			legal: false,
-			path: '/',
-			type: 'redirect'
-		};
-	}
+	// function validatePath(path_){
+	// 	var path = String(path_).trim();
+	// 	if(path === '/'){
+	// 		return {
+	// 			legal: true,
+	// 			path: path,
+	// 			type: 'default'
+	// 		}
+	// 	}
+	// 	if(path==='/anime' || path==='/calculate' || path==='/result' || path==='/start' || path==='/sex'){
+	// 		return {
+	// 			legal: true,
+	// 			path: path,
+	// 			type: path.slice(1)
+	// 		}
+	// 	}
+	// 	if(path.match(/\/question\/(\d{1,})$/) !== null){
+	// 		return {
+	// 			legal: true,
+	// 			path: path,
+	// 			type: 'question'
+	// 		}
+	// 	}
+	// 	return {
+	// 		legal: false,
+	// 		path: '/',
+	// 		type: 'redirect'
+	// 	};
+	// }
 
 	function navTo(path_){
 		var html = document.documentElement;
@@ -450,27 +445,6 @@
 			}, 150);
 		}, traDur);
 	}
-
-	// function dataURItoBlob(dataURI) {
-	//     // convert base64/URLEncoded data component to raw binary data held in a string
-	//     var byteString;
-	//     if (dataURI.split(',')[0].indexOf('base64') >= 0)
-	//         byteString = atob(dataURI.split(',')[1]);
-	//     else
-	//         byteString = unescape(dataURI.split(',')[1]);
-
-	//     // separate out the mime component
-	//     var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-	//     // write the bytes of the string to a typed array
-	//     var ia = new Uint8Array(byteString.length);
-	//     for (var i = 0; i < byteString.length; i++) {
-	//         ia[i] = byteString.charCodeAt(i);
-	//     }
-
-	//     return new Blob([ia], {type:mimeString});
-	// }
-
 
 	// start page
 	var btn = document.getElementById('enter');
