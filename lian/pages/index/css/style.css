@@ -46,7 +46,7 @@ input{
   position: relative;
   transform-style: preserve-3d;
   perspective: 10000px;
-  perspective-origin: 85% 150%;
+  perspective-origin: 85% 200%;
 }
 .content .page{
   width: 100%;
@@ -387,7 +387,7 @@ body{
   }
 }
 .question.run-out{
-  animation: ques-run-out 1s ease-out 1;
+  animation: ques-run-out 2s ease-out 1;
 }
 @keyframes ques-run-out{
   from{
