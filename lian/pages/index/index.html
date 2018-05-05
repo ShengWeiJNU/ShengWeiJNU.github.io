@@ -10,16 +10,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-<style type="text/css">
-#vue{
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	z-index: 10;
-}
-</style>
 <div class="content">
-	<div class="page default-page" data-path="/"></div>
+	<div class="page default-page active" data-path="/"></div>
 	<div class="page anime-container" data-path="/anime">
 		<div class="anime">
 			<img async data-src="images/anime/anime1.gif" />
@@ -97,15 +89,15 @@
 		<div class="sex-item" data-sex="unknown">
 		</div>
 	</div>
-	<div class="page result active" data-path="/result">
+<!-- 	<div class="page result active" data-path="/result">
 		<img class="page-bg hide" async src="images/result/bg.png" />
 		<img class="content-bg" async src="images/result/content_bg.png" />
 		<img class="ticket-bg" async src="images/result/ticket_unknown.png" />
 		<img class="percept-bg" async src="images/result/percept_2d.png" />
 		<img class="conclude-bg" async src="images/result/conclusion_2d_1.png" />
 		<span class="username">旅行者bibibobo</span>
-	</div>
-	<img id="vue" :src="src"/>
+	</div> -->
+	<img id="vue" class="hide" :src="src"/>
 </div>
 <canvas id="canvas" style="display: none !important;"></canvas>
 <script type="text/javascript">
@@ -129,12 +121,10 @@
 		sessionStorage.setItem('path', '/');
 		sessionStorage.setItem('username', '佚名');
 		sessionStorage.setItem('sex', 'unknown');
-		// sessionStorage.setItem('scores', '[]');
-		sessionStorage.setItem('scores', '[6]');/*test*/
+		sessionStorage.setItem('scores', '[]');
 	}else if(path.type === 'question'){
 		sessionStorage.setItem('scores', '[]');
 	}
-	navTo('/result');/*test*/
 	var __configureJSON = null;
 	var genQuesPageInd;
 
@@ -431,7 +421,6 @@
 							// var dataurl = canvas.toDataURL('image/jpeg', 1.0);
 							// img.src = dataurl;
 							page.innerHTML = '';
-							alert(1);
 							document.getElementById('vue').classList.remove('hide');
 							new Vue({
 								el: '#vue',
@@ -510,7 +499,6 @@
 		v_.addEventListener('click', function(e_){
 			var sex = e_.currentTarget.getAttribute('data-sex');
 			sessionStorage.setItem('sex', sex);
-			// navTo('/calculate');/*test*/
 			navTo('/result');
 		});
 	});
