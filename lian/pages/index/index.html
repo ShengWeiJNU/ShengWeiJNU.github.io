@@ -395,7 +395,7 @@
 				html2canvas(page, {
 					'width': page.getBoundingClientRect().width,
 					'height': page.getBoundingClientRect().height,
-					// 'useCORS': true,
+					'useCORS': true,
 					'canvas': document.getElementById('canvas')
 					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
@@ -409,8 +409,9 @@
 							src: canvas.toDataURL('image/jpeg', 1.0)
 						}
 					})
-				}).catch(err_){
+				}).catch(function(err_){
 					console.error(err_);
+				});
 			}
 			setTimeout(function(){
 				tarPage.classList.add('run-in');
