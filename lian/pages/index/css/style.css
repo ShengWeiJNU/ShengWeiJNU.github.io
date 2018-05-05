@@ -69,7 +69,7 @@ input{
 } */
 .anime-container.run-out .trigger-container{
   background-image: url('../images/anime/letter.png');
-  transform: scale(10);
+  transform: scale(5);
 }
 .anime-container .anime{
   position: absolute;
