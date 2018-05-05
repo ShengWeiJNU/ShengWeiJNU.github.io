@@ -125,7 +125,7 @@
 	}else if(path.type === 'question'){
 		sessionStorage.setItem('scores', '[]');
 	}
-	navTo('/result');/*test*/
+	// navTo('/result');/**/test
 	var __configureJSON = null;
 	// var __Data = {
 	// 	'username': null,
@@ -410,8 +410,16 @@
 					'canvas': document.getElementById('canvas')
 					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
+					// var img = new Image();
+					// img.onload = function(){
+					// 	page.innerHTML = img.outerHTML;
+					// 	console.log('生成结果页：');
+					// 	// console.log(this.src);
+					// }
+					// var dataurl = canvas.toDataURL('image/jpeg', 1.0);
+					// img.src = dataurl;
 					page.innerHTML = '';
-					document.getElementById('vue').className = '';
+					alert(1);
 					new Vue({
 						el: '#vue',
 						data: {
@@ -419,7 +427,6 @@
 						}
 					})
 				});
-
 			}
 			setTimeout(function(){
 				tarPage.classList.add('run-in');
