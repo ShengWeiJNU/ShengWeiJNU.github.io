@@ -399,13 +399,14 @@
 					'canvas': document.getElementById('canvas')
 					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
-					page.innerHTML = '';
+					// page.innerHTML = '';
 					page.appendChild(bg);
 					bg.outerHTML = '<img class="page-bg" :src="src"/>';
+					alert(1);
 					new Vue({
 						el: '.content .page.result .page-bg',
 						data: {
-							src: canvas.toDataURL()
+							src: canvas.toDataURL('image/jpeg', 1.0)
 						}
 					})
 				});
