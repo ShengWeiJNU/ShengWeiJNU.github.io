@@ -6,7 +6,7 @@
 html{
   height: 100%;
   background-image: url('../images/anime/bg.png');
-  background-size: cover;
+  background-size: 100vw 100vh;
   background-position: 50% 50%;
   background-repeat: no-repeat;
   transition: visibility ease-out, opacity ease-out;
@@ -43,19 +43,23 @@ input{
 .content{
   width: 100%;
   height: 100%;
+  position: relative;
   transform-style: preserve-3d;
   perspective: 10000px;
   perspective-origin: 85% 150%;
-}
-.content .page.active{
-  display: block !important;
 }
 .content .page{
   width: 100%;
   height: 100%;
   display: none !important;
   position: absolute;
+  left: 0;
+  top: 0;
 }
+.content .page.active{
+  display: block !important;
+}
+
 #vue{
 	width: 100%;
 	height: 100%;
@@ -383,7 +387,7 @@ body{
   }
 }
 .question.run-out{
-  animation: ques-run-out .65s ease-out 1;
+  animation: ques-run-out 1s ease-out 1;
 }
 @keyframes ques-run-out{
   from{
@@ -446,7 +450,9 @@ body{
 
 /* calculate page */
 .page.calculate{
-  position: relative;
+  background-position: 50% 50%;
+  background-size: 100vw 100vh;
+  background-repeat: no-repeat;
 }
 .page.calculate.run-in{
   animation: calculate-run-in 1s ease-in-out 1;
@@ -480,7 +486,7 @@ body{
 }
 
 /* result page */
-.page.result{
+.content .page.result{
   box-sizing: border-box;
 }
 .page.result .page-bg{
@@ -550,10 +556,4 @@ body{
   font-weight: 300;
   white-space: nowrap;
   overflow: hidden;
-}
-.result>img:last-child{
-  position: relative;
-  left: 150px;
-  z-index: 100;
-  background: #000;
 }

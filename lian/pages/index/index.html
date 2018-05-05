@@ -7,7 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 	<!-- <script src="../../js/vconsole.min.js"></script> -->
 	<script src="../../js/html2canvas.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
 </head>
 <body>
 <div class="content">
@@ -97,7 +97,7 @@
 		<img class="conclude-bg" async src="images/result/conclusion_2d_1.png" />
 		<span class="username">旅行者bibibobo</span>
 	</div> -->
-	<img id="vue" class="hide" :src="src"/>
+	<!-- <img id="vue" class="hide" :src="src"/> -->
 </div>
 <canvas id="canvas" style="display: none !important;"></canvas>
 <script type="text/javascript">
@@ -192,10 +192,10 @@
 			return;
 		}
 		var img = result.querySelector('.page-bg');
-		if(img === null){
+		var username = result.querySelector('.username');
+		if(img===null || username===null){
 			return;
 		}
-		var username = result.querySelector('.username');
 		var h = img.getBoundingClientRect().height;
 		var fontsize = h * 0.0221;
 		username.setAttribute('style', 'font-size: '+ fontsize +'px;');
@@ -387,24 +387,29 @@
 		html.classList.add('hide');
 		html.classList.add('forbidOverflow');
 		curPage.classList.add('run-out');
+		// 页面渐隐
 		setTimeout(function(){
 			curPage.classList.remove('active');
 			curPage.classList.remove('run-out');
 			tarPage.classList.add('active');
+			// 不可见情况下切换页面
 			setTimeout(function(){
 				tarPage.classList.add('run-in');
 				html.classList.remove('hide');
 				var runInDur = getComputedStyle(tarPage).animationDuration.match(/(\d*\.?\d*)/g);
 				runInDur = runInDur!==null ? +runInDur[0]*1000 : 0;
+				// 页面渐显
 				setTimeout(function(){
 					tarPage.classList.remove('run-in');
 					html.classList.remove('forbidOverflow');
-					if(path === '/result'){
+					if(path === '/calculate'){
+						tarPage.style.backgroundImage = "url('images/anime/bg.png')";
 						setTextSize();
+						createResultPage();
 						var page = document.querySelector('.content .page.result');
+						page.classList.add('active');
 						var bg = page.querySelector('.page-bg');
 						bg.classList.remove('hide');
-
 						html2canvas(page, {
 							'width': page.getBoundingClientRect().width,
 							'height': page.getBoundingClientRect().height,
@@ -412,22 +417,21 @@
 							'canvas': document.getElementById('canvas')
 							// 'foreignObjectRendering': true
 						}).then(function(canvas) {
-							// var img = new Image();
-							// img.onload = function(){
-							// 	page.innerHTML = img.outerHTML;
-							// 	console.log('生成结果页：');
-							// 	// console.log(this.src);
-							// }
-							// var dataurl = canvas.toDataURL('image/jpeg', 1.0);
-							// img.src = dataurl;
 							page.innerHTML = '';
-							document.getElementById('vue').classList.remove('hide');
-							new Vue({
-								el: '#vue',
-								data: {
-									src: canvas.toDataURL('image/jpeg', 1.0)
-								}
-							})
+							// document.getElementById('vue').classList.remove('hide');
+							// new Vue({
+							// 	el: '#vue',
+							// 	data: {
+							// 		src: canvas.toDataURL('image/jpeg', 1.0)
+							// 	}
+							// });
+
+							bg.src = canvas.toDataURL();
+							page.innerHTML = bg.outerHTML;
+							page.classList.remove('active');
+							setTimeout(function(){
+								navTo('/result');
+							}, 3000);
 						});
 					}
 				}, runInDur);
@@ -500,9 +504,6 @@
 			var sex = e_.currentTarget.getAttribute('data-sex');
 			sessionStorage.setItem('sex', sex);
 			navTo('/calculate');
-			setTimeout(function(){
-				navTo('/result');
-			}, 3000);
 		});
 	});
 
@@ -545,7 +546,7 @@
 			return '/result';
 		}
 		var page = document.createElement('div');
-		content.appendChild(page);
+		content.insertBefore(page, content.querySelector('.page'));
 		var info = {
 			// 'name': __Data.username,
 			'name': sessionStorage.getItem('username'),
