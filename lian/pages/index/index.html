@@ -5,8 +5,9 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
 	<title>问卷</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<script src="../../js/vconsole.min.js"></script>
+	<!-- <script src="../../js/vconsole.min.js"></script> -->
 	<script src="../../js/html2canvas.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
 <div class="content">
@@ -91,17 +92,17 @@
 </div>
 <canvas id="canvas" style="display: none;"></canvas>
 <script type="text/javascript">
-window.vConsole = new window.VConsole({
-  defaultPlugins: ['system', 'network', 'element', 'storage'], // 可以在此设定要默认加载的面板
-  maxLogNumber: 1000,
-  // disableLogScrolling: true,
-  onReady: function() {
-    console.log('vConsole is ready.');
-  },
-  onClearLog: function() {
-    console.log('on clearLog');
-  }
-});
+// window.vConsole = new window.VConsole({
+//   defaultPlugins: ['system', 'network', 'element', 'storage'], // 可以在此设定要默认加载的面板
+//   maxLogNumber: 1000,
+//   // disableLogScrolling: true,
+//   onReady: function() {
+//     console.log('vConsole is ready.');
+//   },
+//   onClearLog: function() {
+//     console.log('on clearLog');
+//   }
+// });
 
 (function(){
 	// init page
@@ -398,22 +399,15 @@ window.vConsole = new window.VConsole({
 					'canvas': document.getElementById('canvas')
 					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
-					// bg.src = canvas.toDataURL();
-					// <img class="page-bg hide" async data-src="images/result/bg.png" />;
-
-
-					var img = new Image();
-					page.appendChild(img);
-					img.setAttribute('crossorigin', "anonymous");
-					img.onload = function(){
-						console.log('生成结果页：');
-						// console.log(this.src);
-						bg.src = this.src;
-						// page.removeChild(this);
-					}
-					var dataurl = canvas.toDataURL('image/jpeg', 1.0);
-					window.name = dataurl;
-					img.src = window.name;
+					page.innerHTML = '';
+					page.appendChild(bg);
+					bg.outerHTML = '<img class="page-bg" :src="src"/>';
+					new Vue({
+						el: '.content .page.result .page-bg',
+						data: {
+							src: canvas.toDataURL()
+						}
+					})
 				});
 			}
 			setTimeout(function(){
