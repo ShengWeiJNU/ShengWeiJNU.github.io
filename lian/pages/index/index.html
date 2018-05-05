@@ -639,6 +639,7 @@
 		}
 		var urls = ["images/result/bg.png", "images/result/content_bg.png", "images/result/"+ info.ticket +".png", "images/result/"+ info.percept +".png", "images/result/"+ info.conclude +".png"];
 		console.log(urls);
+		loadAsyncFromURLs(urls);
 		page.outerHTML = '<div class="page result" data-path="/result">\
 		<img class="page-bg hide" src="'+ urls[0] +'" />\
 		<img class="content-bg" src='+ urls[1] +' />\
@@ -647,7 +648,6 @@
 		<img class="conclude-bg" src='+ urls[4] +' />\
 		<span class="username">旅行者'+ info.name +'</span>\
 		</div>';
-		// loadAsyncFromURLs(urls);
 		return '/result';
 	}
 })();
