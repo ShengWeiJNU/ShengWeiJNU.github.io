@@ -10,6 +10,14 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
+<style type="text/css">
+#vue{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 10;
+}
+</style>
 <div class="content">
 	<div class="page default-page active" data-path="/"></div>
 	<div class="page anime-container" data-path="/anime">
@@ -99,7 +107,7 @@
 	</div>
 	<img id="vue" :src="src"/>
 </div>
-<canvas id="canvas" style="display: none;"></canvas>
+<canvas id="canvas" style="display: none !important;"></canvas>
 <script type="text/javascript">
 // window.vConsole = new window.VConsole({
 //   defaultPlugins: ['system', 'network', 'element', 'storage'], // 可以在此设定要默认加载的面板
@@ -114,6 +122,36 @@
 // });
 
 
+(function(){
+	var body = document.body;
+	var inp = document.querySelectorAll('input[data-focus]');
+	if(inp.length){
+		return;
+	}
+	var boundRect = body.getBoundingClientRect();
+	var maxw = +getComputedStyle(body).maxWidth.slice(0, -2);
+	var minw = +getComputedStyle(body).minWidth.slice(0, -2);
+	maxw = maxw<=innerWidth ? maxw : innerWidth;
+	if(minw >= innerWidth){
+		body.style.minWidth = innerWidth + 'px';
+		minw = innerWidth;
+	}
+	var ow = boundRect.width;
+	var oh = boundRect.height;
+	var nw=maxw, nh=innerHeight;
+	if(innerHeight*0.562996 > maxw){
+		nw = maxw;
+		nh = nw / 0.562996;
+	}else if(innerHeight*0.562996 < minw){
+		nw = minw;
+		nh = nw / 0.562996;
+	}else{
+		nw = innerHeight * 0.562996;
+		nh = innerHeight;
+	}
+	body.style.width = nw + 'px';
+	body.style.height = nh + 'px';
+})();
 
 (function(){
 	var page = document.querySelector('.page.result.active');
