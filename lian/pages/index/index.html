@@ -10,6 +10,18 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
+<style type="text/css">
+#vue{
+	width: 100%;
+	height: 50%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	object-fit: contain;
+	object-position: 50% 50%;
+	background-color: rgba(0,0,0,.3);
+}
+</style>
 <div class="content">
 	<div class="page default-page active" data-path="/"></div>
 	<div class="page anime-container" data-path="/anime">
@@ -89,6 +101,7 @@
 		<div class="sex-item" data-sex="unknown">
 		</div>
 	</div>
+	<img id="vue" class="page-bg" :src="src"/>
 </div>
 <canvas id="canvas" style="display: none;"></canvas>
 <script type="text/javascript">
@@ -392,6 +405,7 @@
 				var page = document.querySelector('.content .page.result');
 				var bg = page.querySelector('.page-bg');
 				bg.classList.remove('hide');
+
 				html2canvas(page, {
 					'width': page.getBoundingClientRect().width,
 					'height': page.getBoundingClientRect().height,
@@ -399,19 +413,24 @@
 					'canvas': document.getElementById('canvas')
 					// 'foreignObjectRendering': true
 				}).then(function(canvas) {
-					// page.innerHTML = '';
-					page.appendChild(bg);
-					bg.outerHTML = '<img class="page-bg" :src="src"/>';
+					// var img = new Image();
+					// img.onload = function(){
+					// 	page.innerHTML = img.outerHTML;
+					// 	console.log('生成结果页：');
+					// 	// console.log(this.src);
+					// }
+					// var dataurl = canvas.toDataURL('image/jpeg', 1.0);
+					// img.src = dataurl;
+					page.innerHTML = '';
 					alert(1);
 					new Vue({
-						el: '.content .page.result .page-bg',
+						el: '#vue',
 						data: {
 							src: canvas.toDataURL('image/jpeg', 1.0)
 						}
 					})
-				}).catch(function(err_){
-					console.error(err_);
 				});
+
 			}
 			setTimeout(function(){
 				tarPage.classList.add('run-in');
