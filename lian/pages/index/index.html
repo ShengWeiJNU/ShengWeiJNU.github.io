@@ -77,8 +77,8 @@
 	</div>
 	<div class="page calculate" data-path="/calculate">
 		<img class="page-bg" async data-src="images/calculate/page-bg.png" />
-		<img class="loading-bg" async data-src="images/calculate/quietpoint.gif" />
-		<img class="sentence" async data-src="images/calculate/shake.png" />
+		<img class="loading-bg" async data-src="images/calculate/excitingpoint.gif" />
+		<img class="sentence" async data-src="images/calculate/calc.gif" />
 	</div>
 	<div class="page sex" data-path="/sex">
 		<img class="sex-bg" async data-src="images/sex/bg.png" />
@@ -472,7 +472,7 @@
 		sessionStorage.setItem('scores', JSON.stringify(scores));
 		// __Data.scores.push(val);
 		// console.log(__Data.scores);
-		if(scores.length < 6){
+		if(scores.length < __configureJSON['pickQues']){
 		// if(__Data.scores.length < 6){
 			var ind = genQuesPageInd();
 			var path = createQuestionPage(ind);
@@ -499,7 +499,10 @@
 		v_.addEventListener('click', function(e_){
 			var sex = e_.currentTarget.getAttribute('data-sex');
 			sessionStorage.setItem('sex', sex);
-			navTo('/result');
+			navTo('/calculate');
+			setTimeout(function(){
+				navTo('/result');
+			}, 3000);
 		});
 	});
 
@@ -509,50 +512,6 @@
 	var shakeSide = {
 		left: 0,
 		right: 0
-	}
-	// var deg = 0;
-	window.ondevicemotion = function(e_){
-		var calcPage = document.querySelector('.page.calculate.active');
-		if(!calcPage){
-			return;
-		}
-		// var pagebg = calcPage.querySelector('.page-bg');
-		var animeGif = calcPage.querySelector('.loading-bg');
-		var sentence = calcPage.querySelector('.sentence');
-		if(lastTriggerTime === null){
-			lastTriggerTime = e_.timeStamp;
-			animeGif.src = 'images/calculate/excitingpoint.gif';
-			return;
-		}else if(e_.timeStamp-lastTriggerTime <= 100){
-			return;
-		}
-		var alpha = e_.rotationRate.gamma;
-		// deg = alpha * 4;
-		// deg = abs(deg)>=65 ? 65*dir : deg;
-		// if(abs(deg) <= 1){
-			// deg = 0;
-		// }
-		// var dir = deg>0 ? 1 : (deg<0?-1:0);
-		// if(deg !== 0){
-			// pagebg.style.setProperty('transform', 'rotate('+ deg +'deg)');
-		// }
-		// deg /= 6;
-		if(abs(alpha) >= 8){
-			lastTriggerTime = e_.timeStamp;
-			if(alpha > 0){
-				// 向左
-				shakeSide.left ++;
-			}else{
-				// 向右
-				shakeSide.right ++;
-			}
-			if(shakeSide.left>=2 && shakeSide.right>=2){
-				sentence.src = 'images/calculate/calc.gif';
-				setTimeout(function(){
-					navTo('/result');
-				}, 3000);
-			}
-		}
 	}
 
 	function createQuestionPage(index_){
