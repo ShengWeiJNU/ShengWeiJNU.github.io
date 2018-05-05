@@ -47,11 +47,13 @@
 		setBodySize();
 		// loadImgs();
 		// navTo('/result');
+
+		setTimeout(c, 3000);
 	}
 	window.onresize = function(e_){
 		setBodySize();
 	}
-	document.body.onclick = function(e_){
+	function c(){
 		var page = document.querySelector('.page.result.active');
 		if(!page){
 			return;
