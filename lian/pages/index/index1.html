@@ -5,10 +5,18 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
 	<title>问卷</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<script src="../../js/vconsole.min.js"></script>
+	<!-- <script src="../../js/vconsole.min.js"></script> -->
 	<script src="../../js/html2canvas.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
+<style type="text/css">
+#vue{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+</style>
 <div class="content">
 	<div class="page result active" data-path="/result">
 		<img class="page-bg hide" async src="images/result/bg.png" />
@@ -18,20 +26,21 @@
 		<img class="conclude-bg" async src="images/result/conclusion_2d_1.png" />
 		<span class="username">旅行者bibibobo</span>
 	</div>
+	<img id="vue" :src="src"/>
 </div>
 <canvas id="canvas" style="display: none !important;"></canvas>
 <script type="text/javascript">
-window.vConsole = new window.VConsole({
-  defaultPlugins: ['system', 'network', 'element', 'storage'], // 可以在此设定要默认加载的面板
-  maxLogNumber: 1000,
-  // disableLogScrolling: true,
-  onReady: function() {
-    console.log('vConsole is ready.');
-  },
-  onClearLog: function() {
-    console.log('on clearLog');
-  }
-});
+// window.vConsole = new window.VConsole({
+//   defaultPlugins: ['system', 'network', 'element', 'storage'], // 可以在此设定要默认加载的面板
+//   maxLogNumber: 1000,
+//   // disableLogScrolling: true,
+//   onReady: function() {
+//     console.log('vConsole is ready.');
+//   },
+//   onClearLog: function() {
+//     console.log('on clearLog');
+//   }
+// });
 
 (function(){
 	window.onload = function(e_){
@@ -54,14 +63,21 @@ window.vConsole = new window.VConsole({
 			'canvas': document.getElementById('canvas')
 			// 'foreignObjectRendering': true
 		}).then(function(canvas) {
-			var img = new Image();
-			img.onload = function(){
-				page.innerHTML = img.outerHTML;
-				console.log('生成结果页：');
-				// console.log(this.src);
-			}
-			var dataurl = canvas.toDataURL('image/jpeg', 1.0);
-			img.src = dataurl;
+			// var img = new Image();
+			// img.onload = function(){
+			// 	page.innerHTML = img.outerHTML;
+			// 	console.log('生成结果页：');
+			// 	// console.log(this.src);
+			// }
+			// var dataurl = canvas.toDataURL('image/jpeg', 1.0);
+			// img.src = dataurl;
+			page.innerHTML = '';
+			new Vue({
+				el: '#vue',
+				data: {
+					src: canvas.toDataURL('image/jpeg', 1.0)
+				}
+			})
 		});
 	}
 
