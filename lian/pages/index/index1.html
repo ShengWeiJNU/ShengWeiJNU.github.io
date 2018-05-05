@@ -51,7 +51,7 @@
 	window.onresize = function(e_){
 		setBodySize();
 	}
-	window.onclick = function(e_){
+	document.body.onclick = function(e_){
 		var page = document.querySelector('.page.result.active');
 		if(!page){
 			return;
@@ -72,6 +72,7 @@
 			// var dataurl = canvas.toDataURL('image/jpeg', 1.0);
 			// img.src = dataurl;
 			page.innerHTML = '';
+			alert(1);
 			new Vue({
 				el: '#vue',
 				data: {
