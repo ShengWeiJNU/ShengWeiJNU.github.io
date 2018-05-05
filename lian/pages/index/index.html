@@ -112,11 +112,12 @@
 		sessionStorage.setItem('path', '/');
 		sessionStorage.setItem('username', '佚名');
 		sessionStorage.setItem('sex', 'unknown');
-		sessionStorage.setItem('scores', '[]');
+		// sessionStorage.setItem('scores', '[]');
+		sessionStorage.setItem('scores', '[6]');/*test*/
 	}else if(path.type === 'question'){
 		sessionStorage.setItem('scores', '[]');
 	}
-	// sessionStorage.setItem('path', '/result');/*test*/
+	navTo('/result');/*test*/
 	var __configureJSON = null;
 	// var __Data = {
 	// 	'username': null,
@@ -643,7 +644,7 @@
 		console.log(urls);
 		loadAsyncFromURLs(urls);
 		page.outerHTML = '<div class="page result" data-path="/result">\
-		<img class="page-bg hide" src="'+ urls[0] +'" />\
+		<img class="page-bg hide" src="images/result/bg.png" />\
 		<img class="content-bg" src='+ urls[1] +' />\
 		<img class="ticket-bg" src='+ urls[2] +' />\
 		<img class="percept-bg" src='+ urls[3] +' />\
