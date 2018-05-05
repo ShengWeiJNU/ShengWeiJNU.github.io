@@ -46,7 +46,7 @@ input{
   position: relative;
   transform-style: preserve-3d;
   perspective: 10000px;
-  perspective-origin: 85% 200%;
+  perspective-origin: 85% 500%;
 }
 .content .page{
   width: 100%;
@@ -396,7 +396,7 @@ body{
   }
   to{
     transform-origin: 0 100%;
-    transform: rotate3d(0,1,0,-180deg);
+    transform: rotate3d(0,1,0,-360deg);
   }
 }
 
