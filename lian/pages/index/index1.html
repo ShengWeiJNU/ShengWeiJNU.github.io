@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="content">
-	<div class="page result" data-path="/result">
+	<div class="page result active" data-path="/result">
 		<img class="page-bg hide" async data-src="images/result/bg.png" />
 		<img class="content-bg" async data-src="images/result/content_bg.png" />
 		<img class="ticket-bg" async data-src="images/result/ticket_unknown.png" />
@@ -37,7 +37,7 @@
 	window.onload = function(e_){
 		setBodySize();
 		loadImgs();
-		navTo('/result');
+		// navTo('/result');
 	}
 	window.onresize = function(e_){
 		setBodySize();
@@ -57,7 +57,7 @@
 			img.onload = function(){
 				page.innerHTML = img.outerHTML;
 				console.log('生成结果页：');
-				console.log(this.src);
+				// console.log(this.src);
 			}
 			var dataurl = canvas.toDataURL('image/jpeg', 1.0);
 			img.src = dataurl;
@@ -129,43 +129,43 @@
 		}
 	}
 
-	function navTo(path_){
-		var body = document.body;
-		var curPage = body.querySelector('.page.active');
-		var tarPage = body.querySelector('.page[data-path="'+ path_ +'"]');
-		if(tarPage === null){
-			var path = path_.trim().match(/\/question\/(\d{1,})$/);
-			if(path !== null){
-				var ind = path[1];
-				navTo(createQuestionPage(ind));
-			}
-			window.name = '/';
-			navTo(window.name);
-			return;
-		}
-		if(curPage === null){
-			curPage = tarPage;
-		}
-		window.name = path_;
-		var bodyDur = getComputedStyle(body).transitionDuration.match(/(\d*\.?\d*)/g);
-		bodyDur = bodyDur!==null ? +bodyDur[0]*1000 : 0;
-		body.classList.add('hide');
-		curPage.classList.add('run-out');
-		setTimeout(function(){
-			curPage.classList.remove('active');
-			curPage.classList.remove('run-out');
-			tarPage.classList.add('active');
-			setTimeout(function(){
-				tarPage.classList.add('run-in');
-				body.classList.remove('hide');
-				var runInDur = getComputedStyle(tarPage).animationDuration.match(/(\d*\.?\d*)/g);
-				runInDur = runInDur!==null ? +runInDur[0]*1000 : 0;
-				setTimeout(function(){
-					tarPage.classList.remove('run-in');
-				}, runInDur);
-			}, 150);
-		}, bodyDur);
-	}
+	// function navTo(path_){
+	// 	var body = document.body;
+	// 	var curPage = body.querySelector('.page.active');
+	// 	var tarPage = body.querySelector('.page[data-path="'+ path_ +'"]');
+	// 	if(tarPage === null){
+	// 		var path = path_.trim().match(/\/question\/(\d{1,})$/);
+	// 		if(path !== null){
+	// 			var ind = path[1];
+	// 			navTo(createQuestionPage(ind));
+	// 		}
+	// 		window.name = '/';
+	// 		navTo(window.name);
+	// 		return;
+	// 	}
+	// 	if(curPage === null){
+	// 		curPage = tarPage;
+	// 	}
+	// 	window.name = path_;
+	// 	var bodyDur = getComputedStyle(body).transitionDuration.match(/(\d*\.?\d*)/g);
+	// 	bodyDur = bodyDur!==null ? +bodyDur[0]*1000 : 0;
+	// 	body.classList.add('hide');
+	// 	curPage.classList.add('run-out');
+	// 	setTimeout(function(){
+	// 		curPage.classList.remove('active');
+	// 		curPage.classList.remove('run-out');
+	// 		tarPage.classList.add('active');
+	// 		setTimeout(function(){
+	// 			tarPage.classList.add('run-in');
+	// 			body.classList.remove('hide');
+	// 			var runInDur = getComputedStyle(tarPage).animationDuration.match(/(\d*\.?\d*)/g);
+	// 			runInDur = runInDur!==null ? +runInDur[0]*1000 : 0;
+	// 			setTimeout(function(){
+	// 				tarPage.classList.remove('run-in');
+	// 			}, runInDur);
+	// 		}, 150);
+	// 	}, bodyDur);
+	// }
 })();
 </script>
 </body>
