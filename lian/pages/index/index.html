@@ -401,38 +401,6 @@
 			curPage.classList.remove('active');
 			curPage.classList.remove('run-out');
 			tarPage.classList.add('active');
-			if(path === '/result'){
-				setTextSize();
-				var page = document.querySelector('.content .page.result');
-				var bg = page.querySelector('.page-bg');
-				bg.classList.remove('hide');
-
-				html2canvas(page, {
-					'width': page.getBoundingClientRect().width,
-					'height': page.getBoundingClientRect().height,
-					'useCORS': true,
-					'canvas': document.getElementById('canvas')
-					// 'foreignObjectRendering': true
-				}).then(function(canvas) {
-					// var img = new Image();
-					// img.onload = function(){
-					// 	page.innerHTML = img.outerHTML;
-					// 	console.log('生成结果页：');
-					// 	// console.log(this.src);
-					// }
-					// var dataurl = canvas.toDataURL('image/jpeg', 1.0);
-					// img.src = dataurl;
-					page.innerHTML = '';
-					alert(1);
-					document.getElementById('vue').classList.remove('hide');
-					new Vue({
-						el: '#vue',
-						data: {
-							src: canvas.toDataURL('image/jpeg', 1.0)
-						}
-					})
-				});
-			}
 			setTimeout(function(){
 				tarPage.classList.add('run-in');
 				html.classList.remove('hide');
@@ -441,6 +409,38 @@
 				setTimeout(function(){
 					tarPage.classList.remove('run-in');
 					html.classList.remove('forbidOverflow');
+					if(path === '/result'){
+						setTextSize();
+						var page = document.querySelector('.content .page.result');
+						var bg = page.querySelector('.page-bg');
+						bg.classList.remove('hide');
+
+						html2canvas(page, {
+							'width': page.getBoundingClientRect().width,
+							'height': page.getBoundingClientRect().height,
+							'useCORS': true,
+							'canvas': document.getElementById('canvas')
+							// 'foreignObjectRendering': true
+						}).then(function(canvas) {
+							// var img = new Image();
+							// img.onload = function(){
+							// 	page.innerHTML = img.outerHTML;
+							// 	console.log('生成结果页：');
+							// 	// console.log(this.src);
+							// }
+							// var dataurl = canvas.toDataURL('image/jpeg', 1.0);
+							// img.src = dataurl;
+							page.innerHTML = '';
+							alert(1);
+							document.getElementById('vue').classList.remove('hide');
+							new Vue({
+								el: '#vue',
+								data: {
+									src: canvas.toDataURL('image/jpeg', 1.0)
+								}
+							})
+						});
+					}
 				}, runInDur);
 			}, 150);
 		}, traDur);
