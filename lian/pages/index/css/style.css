@@ -210,10 +210,10 @@ input{
 }
 @keyframes start-run-out{
   from{
-    transform: scale(1) rotate3d(0,1,0, 0);
+    transform: rotate3d(0,1,0, 0);
   }
   to{
-    transform: scale(0) rotate3d(0,1,0, 540deg);
+    transform: rotate3d(0,1,0, 180deg);
   }
 }
 .page[data-path='/start'].run-in{
@@ -221,10 +221,10 @@ input{
 }
 @keyframes start-run-in{
   from{
-    transform: scale(0) rotate3d(0,1,0, 0);
+    transform: rotate3d(0,1,0, -180deg);
   }
   to{
-    transform: scale(1) rotate3d(0,1,0, 720deg);
+    transform: rotate3d(0,1,0, 0deg);
   }
 }
 .startTest .page-bg{
@@ -391,12 +391,12 @@ body{
 }
 @keyframes ques-run-out{
   from{
-    transform-origin: 0 100%;
+    transform-origin: 50% 100%;
     transform: rotate3d(0,1,0,0);
   }
   to{
-    transform-origin: 0 100%;
-    transform: rotate3d(0,1,0,-150deg);
+    transform-origin: 50% 100%;
+    transform: rotate3d(0,1,0,-180deg);
   }
 }
 
@@ -411,10 +411,10 @@ body{
 }
 @keyframes sex-run-out{
   from{
-    transform: rotate(0deg) scale(1);
+    transform: scale(1);
   }
   to{
-    transform: rotate(720deg) scale(0);
+    transform: scale(0);
   }
 }
 .sex .sex-bg{
@@ -556,4 +556,18 @@ body{
   font-weight: 300;
   white-space: nowrap;
   overflow: hidden;
+}
+
+/*scancode page*/
+.page.scanCode{
+}
+.page.scanCode img{
+  width: 40%;
+  height: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  object-position: 50% 50%;
 }
