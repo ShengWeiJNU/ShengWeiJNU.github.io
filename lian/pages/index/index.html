@@ -110,6 +110,7 @@
 (function(){
 	if(device.desktop()){
 		navTo('/scancode');
+		return;
 	}
 	// init page
 	var path = validatePath(sessionStorage.getItem('path'));
@@ -469,7 +470,7 @@
 				}
 			}, runInDur);
 
-		}, runOutDur);
+		}, runOutDur-15);
 	}
 
 	// start page
