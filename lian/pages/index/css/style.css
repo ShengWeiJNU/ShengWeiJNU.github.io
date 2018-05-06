@@ -9,8 +9,6 @@ html{
   background-size: 100vw 100vh;
   background-position: 50% 50%;
   background-repeat: no-repeat;
-  transition: visibility ease-out, opacity ease-out;
-  transition-duration: 0.65s;
 }
 body{
   min-width: 300px;
@@ -21,14 +19,10 @@ body{
   margin: 0;
   transform: translate(-50%, -50%);
 }
-html.hide{
-  visibility: hidden;
-  opacity: 0;
-}
 html.forbidOverflow{
   overflow: hidden;
 }
-html.hide::after{
+html.forbidOP::after{
   content: '';
   width: 100%;
   height: 100%;
@@ -59,19 +53,31 @@ input{
 .content .page.active{
   display: block !important;
 }
-
-#vue{
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	object-fit: contain;
-	object-position: 50% 50%;
-  z-index: 100;
+.page.run-in{
+  animation: default-page-run-in 0.65s linear 1;
 }
-#vue.hide{
-  display: none;
+@keyframes default-page-run-in{
+  from, 5%{
+    visibility: hidden;
+    opacity: 0;
+  }
+  to{
+    visibility: visible;
+    opacity: 1;
+  }
+}
+.page.run-out{
+  animation: default-page-run-out 0.65s linear 1;
+}
+@keyframes default-page-run-out{
+  from, 5%{
+    visibility: visible;
+    opacity: 1;
+  }
+  to{
+    visibility: hidden;
+    opacity: 0;
+  }
 }
 
 .page.default-page{
@@ -211,6 +217,12 @@ input{
 @keyframes start-run-out{
   from{
     transform: rotate3d(0,1,0, 0);
+    visibility: visible;
+    opacity: 1;
+  }
+  to{
+    visibility: hidden;
+    opacity: 0;
   }
   to{
     transform: rotate3d(0,1,0, 180deg);
@@ -222,9 +234,17 @@ input{
 @keyframes start-run-in{
   from{
     transform: rotate3d(0,1,0, -180deg);
+    visibility: hidden;
+    opacity: 0;
+  }
+  5%{
+    visibility: hidden;
+    opacity: 0;
   }
   to{
     transform: rotate3d(0,1,0, 0deg);
+    visibility: visible;
+    opacity: 1;
   }
 }
 .startTest .page-bg{
@@ -376,14 +396,16 @@ body{
   position: absolute;
 }
 .question.run-in{
-/*   animation: ques-run-in .75s ease-out 1; */
+  animation: ques-run-in .75s ease-out 1;
 }
 @keyframes ques-run-in{
-  from{
-    left: 135%;
+  from, 5%{
+    visibility: hidden;
+    opacity: 0;
   }
   to{
-    left: 0;
+    visibility: visible;
+    opacity: 1;
   }
 }
 .question.run-out{
@@ -393,10 +415,14 @@ body{
   from{
     transform-origin: 50% 100%;
     transform: rotate3d(0,1,0,0);
+    visibility: visible;
+    opacity: 1;
   }
   to{
     transform-origin: 50% 100%;
     transform: rotate3d(0,1,0,-180deg);
+    visibility: hidden;
+    opacity: 0;
   }
 }
 

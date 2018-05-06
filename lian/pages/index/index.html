@@ -108,9 +108,9 @@
 
 
 (function(){
-	if(device.desktop()){
-		navTo('/scancode');
-	}
+	// if(device.desktop()){
+	// 	navTo('/scancode');
+	// }
 	// init page
 	var path = validatePath(sessionStorage.getItem('path'));
 	if(!path.legal || path.type==='result' || path.type==='default'){
@@ -378,61 +378,97 @@
 			curPage = tarPage;
 		}
 		sessionStorage.setItem('path', path_);
-		var traDur = getComputedStyle(html).transitionDuration.match(/(\d*\.?\d*)/g);
-		traDur = traDur!==null ? +traDur[0]*1000 : 0;
-		html.classList.add('hide');
+		// var traDur = getComputedStyle(html).transitionDuration.match(/(\d*\.?\d*)/g);
+		// traDur = traDur!==null ? +traDur[0]*1000 : 0;
+		// html.classList.add('hide');
+		// html.classList.add('forbidOverflow');
+		// curPage.classList.add('run-out');
+		// // 页面渐隐
+		// setTimeout(function(){
+		// 	curPage.classList.remove('active');
+		// 	curPage.classList.remove('run-out');
+		// 	tarPage.classList.add('active');
+		// 	// 不可见情况下切换页面
+		// 	setTimeout(function(){
+		// 		tarPage.classList.add('run-in');
+		// 		html.classList.remove('hide');
+		// 		var runInDur = getComputedStyle(tarPage).animationDuration.match(/(\d*\.?\d*)/g);
+		// 		runInDur = runInDur!==null ? +runInDur[0]*1000 : 0;
+		// 		// 页面渐显
+		// 		setTimeout(function(){
+		// 			tarPage.classList.remove('run-in');
+		// 			html.classList.remove('forbidOverflow');
+		// 			if(path === '/calculate'){
+		// 				tarPage.style.backgroundImage = "url('images/anime/bg.png')";
+		// 				setTextSize();
+		// 				createResultPage();
+		// 				var page = document.querySelector('.content .page.result');
+		// 				page.classList.add('active');
+		// 				var bg = page.querySelector('.page-bg');
+		// 				bg.classList.remove('hide');
+		// 				html2canvas(page, {
+		// 					'width': page.getBoundingClientRect().width,
+		// 					'height': page.getBoundingClientRect().height,
+		// 					'useCORS': true,
+		// 					'canvas': document.getElementById('canvas')
+		// 					// 'foreignObjectRendering': true
+		// 				}).then(function(canvas) {
+		// 					bg.src = canvas.toDataURL();
+		// 					page.innerHTML = bg.outerHTML;
+		// 					page.classList.remove('active');
+		// 					setTimeout(function(){
+		// 						navTo('/result');
+		// 					}, 3000);
+		// 				});
+		// 			}
+		// 		}, runInDur);
+		// 	}, 150);
+		// }, traDur);
+
 		html.classList.add('forbidOverflow');
+		html.classList.add('forbidOP');
 		curPage.classList.add('run-out');
-		// 页面渐隐
+		var runOutDur = getComputedStyle(curPage).animationDuration.match(/(\d*\.?\d*)/g);
+		runOutDur = runOutDur!==null ? +runOutDur[0]*1000 : 0;
+		// 当前页移出
 		setTimeout(function(){
 			curPage.classList.remove('active');
 			curPage.classList.remove('run-out');
+			tarPage.classList.add('run-in');
 			tarPage.classList.add('active');
-			// 不可见情况下切换页面
+			var runInDur = getComputedStyle(tarPage).animationDuration.match(/(\d*\.?\d*)/g);
+			runInDur = runInDur!==null ? +runInDur[0]*1000 : 0;
 			setTimeout(function(){
-				tarPage.classList.add('run-in');
-				html.classList.remove('hide');
-				var runInDur = getComputedStyle(tarPage).animationDuration.match(/(\d*\.?\d*)/g);
-				runInDur = runInDur!==null ? +runInDur[0]*1000 : 0;
-				// 页面渐显
-				setTimeout(function(){
-					tarPage.classList.remove('run-in');
-					html.classList.remove('forbidOverflow');
-					if(path === '/calculate'){
-						tarPage.style.backgroundImage = "url('images/anime/bg.png')";
-						setTextSize();
-						createResultPage();
-						var page = document.querySelector('.content .page.result');
-						page.classList.add('active');
-						var bg = page.querySelector('.page-bg');
-						bg.classList.remove('hide');
-						html2canvas(page, {
-							'width': page.getBoundingClientRect().width,
-							'height': page.getBoundingClientRect().height,
-							'useCORS': true,
-							'canvas': document.getElementById('canvas')
-							// 'foreignObjectRendering': true
-						}).then(function(canvas) {
-							page.innerHTML = '';
-							// document.getElementById('vue').classList.remove('hide');
-							// new Vue({
-							// 	el: '#vue',
-							// 	data: {
-							// 		src: canvas.toDataURL('image/jpeg', 1.0)
-							// 	}
-							// });
+				html.classList.remove('forbidOverflow');
+				html.classList.remove('forbidOP');
+				tarPage.classList.remove('run-in');
 
-							bg.src = canvas.toDataURL();
-							page.innerHTML = bg.outerHTML;
-							page.classList.remove('active');
-							setTimeout(function(){
-								navTo('/result');
-							}, 3000);
-						});
-					}
-				}, runInDur);
-			}, 150);
-		}, traDur);
+				if(path === '/calculate'){
+					tarPage.style.backgroundImage = "url('images/anime/bg.png')";
+					setTextSize();
+					createResultPage();
+					var page = document.querySelector('.content .page.result');
+					page.classList.add('active');
+					var bg = page.querySelector('.page-bg');
+					bg.classList.remove('hide');
+					html2canvas(page, {
+						'width': page.getBoundingClientRect().width,
+						'height': page.getBoundingClientRect().height,
+						'useCORS': true,
+						'canvas': document.getElementById('canvas')
+						// 'foreignObjectRendering': true
+					}).then(function(canvas) {
+						bg.src = canvas.toDataURL();
+						page.innerHTML = bg.outerHTML;
+						page.classList.remove('active');
+						setTimeout(function(){
+							navTo('/result');
+						}, 3000);
+					});
+				}
+			}, runInDur);
+
+		}, runOutDur);
 	}
 
 	// start page
