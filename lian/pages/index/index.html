@@ -108,8 +108,14 @@
 
 
 (function(){
-	setBodySize();
 	if(device.desktop()){
+		window.onload = function(e_){
+			setBodySize();
+		}
+		window.onresize = function(e_){
+			setBodySize();
+			setTextSize();
+		}
 		navTo('/scancode');
 		return;
 	}
@@ -126,7 +132,12 @@
 	var __configureJSON = null;
 	var genQuesPageInd;
 
+	window.onresize = function(e_){
+		setBodySize();
+		setTextSize();
+	}
 	window.onload = function(e_){
+		setBodySize();
 		getConfiguration()
 		.then(function(res_){
 			genQuesPageInd = (function(){
@@ -177,10 +188,6 @@
 		.catch(function(err_){
 			console.error(err_);
 		});
-	}
-	window.onresize = function(e_){
-		setBodySize();
-		setTextSize();
 	}
 
 	function setTextSize(){
