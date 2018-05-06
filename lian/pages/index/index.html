@@ -108,9 +108,9 @@
 
 
 (function(){
-	// if(device.desktop()){
-	// 	navTo('/scancode');
-	// }
+	if(device.desktop()){
+		navTo('/scancode');
+	}
 	// init page
 	var path = validatePath(sessionStorage.getItem('path'));
 	if(!path.legal || path.type==='result' || path.type==='default'){
