@@ -432,15 +432,16 @@
 		runOutDur = runOutDur!==null ? +runOutDur[0]*1000 : 0;
 		// 当前页移出
 		setTimeout(function(){
-			curPage.classList.remove('active');
-			curPage.classList.remove('run-out');
 			tarPage.classList.add('run-in');
 			tarPage.classList.add('active');
+			curPage.classList.remove('active');
+			curPage.classList.remove('run-out');
 			var runInDur = getComputedStyle(tarPage).animationDuration.match(/(\d*\.?\d*)/g);
 			runInDur = runInDur!==null ? +runInDur[0]*1000 : 0;
+			html.classList.remove('forbidOP');
 			setTimeout(function(){
 				html.classList.remove('forbidOverflow');
-				html.classList.remove('forbidOP');
+				// html.classList.remove('forbidOP');
 				tarPage.classList.remove('run-in');
 
 				if(path === '/calculate'){

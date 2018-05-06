@@ -41,6 +41,7 @@ input{
   transform-style: preserve-3d;
   perspective: 10000px;
   perspective-origin: 85% 500%;
+  will-change: transform;
 }
 .content .page{
   width: 100%;
@@ -52,6 +53,7 @@ input{
 }
 .content .page.active{
   display: block !important;
+  z-index: 10;
 }
 .page.run-in{
   animation: default-page-run-in 0.65s linear 1;
