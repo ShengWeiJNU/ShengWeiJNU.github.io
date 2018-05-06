@@ -108,6 +108,7 @@
 
 
 (function(){
+	setBodySize();
 	if(device.desktop()){
 		navTo('/scancode');
 		return;
@@ -126,7 +127,6 @@
 	var genQuesPageInd;
 
 	window.onload = function(e_){
-		setBodySize();
 		getConfiguration()
 		.then(function(res_){
 			genQuesPageInd = (function(){
