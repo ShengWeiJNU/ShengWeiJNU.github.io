@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>blog page change effect</title>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+<div class="content">
+	<div class="page active page-in" data-scrolly="0"></div>
+	<div class="page" data-scrolly="0"></div>
+</div>
+<script type="text/javascript">
+var content = document.querySelector('.content');
+content.onscroll = function(e_){
+	var ct = e_.currentTarget;
+	var ap = ct.querySelector('.page.active');
+	ap.setAttribute('data-scrolly', ct.scrollTop);
+}
+document.body.addEventListener('click', f);
+
+function f(e_){
+	var html = document.documentElement;
+	var content = document.querySelector('.content');
+	var ap = content.querySelector('.page.active');
+	var np = content.querySelector('.page:not(.active)');
+	var finishiAnime = 0;
+	if(f.timers.length){
+		return;
+	}
+	content.classList.add('noscroll');
+	html.style.overflowY = 'scroll';
+	var apst = ap.getAttribute('data-scrolly');
+	ap.classList.remove('page-in');
+	ap.style.top = -apst + 'px';
+	ap.classList.add('page-out');
+	var durOut = getComputedStyle(ap)['animation-duration'].slice(0, -1)*1000;
+	var t1 = setTimeout(function(){
+		ap.classList.remove('active');
+		ap.style.top = '0px';
+		ap.classList.remove('page-out');
+		var ind = f.timers.indexOf(t1);
+		f.timers.splice(ind, 1);
+		finishiAnime ++;
+		if(finishiAnime === 2){
+			content.classList.remove('noscroll');
+			html.style.overflowY = 'visible';
+			content.scrollTop = np.getAttribute('data-scrolly');
+		}
+	}, durOut);
+
+	var npst = np.getAttribute('data-scrolly');
+	np.classList.add('active');
+	np.style.top = -npst + 'px';
+	np.classList.add('page-in');
+	var durIn = getComputedStyle(np)['animation-duration'].slice(0, -1)*1000;
+	var t2 = setTimeout(function(){
+		np.style.top = '0px';
+		var ind = f.timers.indexOf(t2);
+		f.timers.splice(ind, 1);
+		finishiAnime ++;
+		if(finishiAnime === 2){
+			content.classList.remove('noscroll');
+			html.style.overflowY = 'visible';
+			content.scrollTop = np.getAttribute('data-scrolly');
+		}
+	}, durIn);
+	f.timers.push(t1, t2);
+};
+f.timers = [];
+</script>
+</body>
+</html>
